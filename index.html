@@ -3,227 +3,254 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dampen — Experimental Anti-Noise for Any Headphones</title>
+<title>Deafen — Six Website Paths That Can Actually Work</title>
 <style>
   :root{
-    --bg:#f2efe8;
-    --ink:#172126;
-    --muted:#5d6a6f;
-    --panel:rgba(255,255,255,0.72);
-    --line:rgba(23,33,38,0.12);
-    --accent:#0f7b6c;
-    --accent-2:#c7f0d6;
-    --danger:#c45151;
-    --shadow:0 24px 80px rgba(23,33,38,0.12);
-    --radius:24px;
+    --bg:#f4f1ea;
+    --paper:rgba(255,255,255,0.78);
+    --ink:#162126;
+    --muted:#607076;
+    --line:rgba(22,33,38,0.12);
+    --accent:#0d7567;
+    --accent-soft:#d8efe8;
+    --warm:#f1e5cf;
+    --shadow:0 26px 90px rgba(22,33,38,0.12);
+    --radius:28px;
   }
   *{box-sizing:border-box}
   html,body{margin:0;min-height:100%}
   body{
-    font:16px/1.45 Georgia, "Times New Roman", serif;
+    font:16px/1.55 Georgia, "Times New Roman", serif;
     color:var(--ink);
     background:
-      radial-gradient(circle at top left, rgba(199,240,214,0.95), transparent 32%),
-      radial-gradient(circle at 90% 10%, rgba(203,224,239,0.9), transparent 26%),
-      linear-gradient(180deg, #f7f4ee 0%, var(--bg) 100%);
-    padding:28px 18px 48px;
+      radial-gradient(circle at top left, rgba(216,239,232,0.95), transparent 34%),
+      radial-gradient(circle at 90% 8%, rgba(241,229,207,0.88), transparent 28%),
+      linear-gradient(180deg, #f8f5ef 0%, var(--bg) 100%);
+    padding:24px 16px 44px;
   }
-  .shell{max-width:980px;margin:0 auto}
+  .shell{max-width:1180px;margin:0 auto}
   .hero{
-    padding:26px;
+    background:var(--paper);
     border:1px solid var(--line);
-    border-radius:32px;
-    background:var(--panel);
+    border-radius:34px;
     box-shadow:var(--shadow);
+    padding:28px;
     backdrop-filter:blur(18px);
   }
   .brand{
     display:inline-flex;
     align-items:center;
     gap:12px;
-    margin-bottom:18px;
   }
   .mark{
-    width:50px;
-    height:50px;
+    width:52px;
+    height:52px;
     border-radius:16px;
-    background:linear-gradient(135deg, var(--accent), #9dd8bf);
     display:grid;
     place-items:center;
-    color:white;
-    box-shadow:0 14px 35px rgba(15,123,108,0.28);
-    font:700 20px/1 Georgia, serif;
-  }
-  h1{
-    margin:0;
-    font-size:clamp(2.4rem, 5vw, 4.7rem);
-    line-height:0.94;
-    letter-spacing:-0.05em;
-    max-width:8ch;
-  }
-  .lede{
-    max-width:42rem;
-    margin:14px 0 0;
-    color:var(--muted);
-    font-size:1.05rem;
-  }
-  .hero-grid{
-    display:grid;
-    grid-template-columns:1.4fr 0.9fr;
-    gap:18px;
-    margin-top:26px;
-  }
-  .panel{
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    background:rgba(255,255,255,0.68);
-    padding:20px;
-  }
-  .status-row{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:14px;
-    flex-wrap:wrap;
+    background:linear-gradient(135deg, var(--accent), #8bcbb6);
+    color:#fff;
+    font:700 22px/1 Georgia, serif;
+    box-shadow:0 16px 38px rgba(13,117,103,0.22);
   }
   .eyebrow{
-    margin:0 0 6px;
+    margin:0;
     color:var(--muted);
     text-transform:uppercase;
     letter-spacing:0.12em;
-    font-size:0.72rem;
-    font-family:"Trebuchet MS", sans-serif;
+    font:700 0.72rem/1.2 "Trebuchet MS", sans-serif;
   }
-  .state{
-    display:inline-flex;
-    align-items:center;
-    gap:9px;
-    border-radius:999px;
-    padding:8px 12px;
-    border:1px solid var(--line);
-    background:rgba(255,255,255,0.84);
-    font-family:"Trebuchet MS", sans-serif;
-    font-size:0.84rem;
+  h1{
+    margin:18px 0 10px;
+    font-size:clamp(2.8rem, 6vw, 5.8rem);
+    line-height:0.92;
+    letter-spacing:-0.06em;
+    max-width:10ch;
   }
-  .dot{
-    width:10px;
-    height:10px;
-    border-radius:50%;
-    background:#98a6ab;
-  }
-  .dot.live{background:var(--accent); animation:pulse 1.2s infinite}
-  .dot.warn{background:var(--danger)}
-  @keyframes pulse{50%{opacity:.35}}
-  .meter{
-    display:flex;
-    align-items:flex-end;
-    gap:18px;
-    margin-top:18px;
-  }
-  .db{
-    font-size:clamp(3rem, 8vw, 5.6rem);
-    line-height:0.9;
-    letter-spacing:-0.07em;
-  }
-  .db-note{
-    max-width:16rem;
+  .lede{
+    max-width:50rem;
+    margin:0;
     color:var(--muted);
+    font-size:1.08rem;
   }
-  .buttons{
-    display:flex;
-    gap:12px;
-    flex-wrap:wrap;
-    margin-top:20px;
-  }
-  button{
-    appearance:none;
-    border:none;
-    border-radius:999px;
-    padding:13px 18px;
-    font:600 0.98rem/1 "Trebuchet MS", sans-serif;
-    cursor:pointer;
-    transition:transform .15s ease, opacity .15s ease, background .15s ease;
-  }
-  button:hover:not(:disabled){transform:translateY(-1px)}
-  button:disabled{opacity:.45;cursor:not-allowed;transform:none}
-  .primary{background:var(--ink);color:#f7f4ee}
-  .secondary{background:transparent;color:var(--ink);border:1px solid var(--line)}
-  .soft{background:var(--accent-2);color:#0a433a}
-  .section{
-    margin-top:18px;
+  .hero-grid{
     display:grid;
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:1.2fr 0.8fr;
     gap:18px;
+    margin-top:24px;
   }
-  .slider-wrap{margin-top:18px}
-  .slider-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:12px;
-    margin-bottom:10px;
-    font-family:"Trebuchet MS", sans-serif;
+  .panel{
+    background:rgba(255,255,255,0.72);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:20px;
   }
-  input[type=range]{
-    width:100%;
-    -webkit-appearance:none;
-    appearance:none;
-    height:7px;
-    border-radius:999px;
-    background:linear-gradient(90deg, #d9e7df, #8fd0b4);
-    outline:none;
-  }
-  input[type=range]::-webkit-slider-thumb{
-    -webkit-appearance:none;
-    width:22px;
-    height:22px;
-    border-radius:50%;
-    background:var(--ink);
-    border:3px solid #fff;
-    box-shadow:0 6px 18px rgba(23,33,38,0.2);
-  }
-  .mini{
-    color:var(--muted);
-    margin:10px 0 0;
-  }
-  .stat-list{
+  .stat-grid{
     display:grid;
     grid-template-columns:repeat(2,minmax(0,1fr));
     gap:12px;
-    margin-top:16px;
   }
   .stat{
     padding:14px;
     border-radius:18px;
-    background:rgba(255,255,255,0.74);
     border:1px solid var(--line);
+    background:rgba(255,255,255,0.78);
   }
   .stat b{
     display:block;
+    margin-top:3px;
     font-size:1.3rem;
-    margin-top:2px;
   }
-  .canvas{
-    width:100%;
-    height:130px;
-    display:block;
-    border-radius:18px;
+  .cta-row{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-top:18px;
+  }
+  .pill{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 14px;
+    border-radius:999px;
+    background:var(--accent-soft);
+    color:#0d4e45;
+    border:1px solid rgba(13,117,103,0.12);
+    font:600 0.92rem/1 "Trebuchet MS", sans-serif;
+  }
+  .button{
+    appearance:none;
+    border:none;
+    border-radius:999px;
+    padding:13px 18px;
+    background:var(--ink);
+    color:#f7f4ee;
+    cursor:pointer;
+    font:600 0.98rem/1 "Trebuchet MS", sans-serif;
+    transition:transform .15s ease, opacity .15s ease;
+  }
+  .button:hover{transform:translateY(-1px)}
+  .button.secondary{
+    background:transparent;
+    color:var(--ink);
     border:1px solid var(--line);
-    background:linear-gradient(180deg, rgba(255,255,255,0.92), rgba(221,236,227,0.72));
   }
-  .tips{
+  .section-head{
+    margin:28px 0 14px;
+    display:flex;
+    align-items:end;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+  .section-head h2{
+    margin:0;
+    font-size:2rem;
+    letter-spacing:-0.04em;
+  }
+  .section-head p{
+    margin:0;
+    color:var(--muted);
+    max-width:36rem;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:18px;
+  }
+  .card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:30px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  .card-top{
+    padding:22px 22px 14px;
+    border-bottom:1px solid var(--line);
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.52)),
+      radial-gradient(circle at top right, rgba(216,239,232,0.9), transparent 36%);
+  }
+  .kicker{
+    margin:0 0 10px;
+    color:var(--muted);
+    font:700 0.72rem/1.2 "Trebuchet MS", sans-serif;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+  }
+  .card h3{
+    margin:0;
+    font-size:2rem;
+    letter-spacing:-0.05em;
+  }
+  .tagline{
+    margin:8px 0 0;
+    color:var(--muted);
+    max-width:33rem;
+  }
+  .card-body{
+    padding:20px 22px 22px;
+    display:grid;
+    gap:18px;
+  }
+  .columns{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+  }
+  .box{
+    padding:16px;
+    border-radius:20px;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,0.72);
+  }
+  .box h4{
+    margin:0 0 8px;
+    font:700 0.95rem/1.3 "Trebuchet MS", sans-serif;
+  }
+  ul{
     margin:0;
     padding-left:18px;
     color:var(--muted);
   }
-  footer{
-    margin-top:16px;
-    color:var(--muted);
-    font-size:0.92rem;
+  .mini-grid{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:12px;
   }
-  @media (max-width:820px){
-    .hero-grid,.section{grid-template-columns:1fr}
-    .db-note{max-width:none}
+  .mini{
+    padding:14px;
+    border-radius:18px;
+    background:rgba(216,239,232,0.46);
+    border:1px solid rgba(13,117,103,0.12);
+  }
+  .mini span{
+    display:block;
+    color:var(--muted);
+    font:700 0.72rem/1.2 "Trebuchet MS", sans-serif;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+  }
+  .mini strong{
+    display:block;
+    margin-top:6px;
+    font-size:1.06rem;
+  }
+  .note{
+    color:var(--muted);
+    margin:0;
+  }
+  .footer{
+    margin-top:20px;
+    padding:18px 20px;
+    border-radius:22px;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,0.65);
+    color:var(--muted);
+  }
+  @media (max-width:900px){
+    .hero-grid,.grid,.columns,.mini-grid{grid-template-columns:1fr}
   }
 </style>
 </head>
@@ -233,495 +260,305 @@
     <div class="brand">
       <div class="mark">D</div>
       <div>
-        <p class="eyebrow">Dampen</p>
-        <p style="margin:0;color:var(--muted)">Experimental anti-noise output for regular headphones</p>
+        <p class="eyebrow">Deafen</p>
+        <p style="margin:2px 0 0;color:var(--muted)">Six website-native product directions that can actually ship</p>
       </div>
     </div>
 
-    <h1>Use any headphones. Let Dampen fight the room.</h1>
-    <p class="lede">Dampen listens through your computer or phone mic, estimates the sound around you, and sends an anti-noise style signal into your headphones. It is an experimental browser version of noise cancellation for studying, focus, and everyday use.</p>
+    <h1>Stop faking ANC. Start owning focus.</h1>
+    <p class="lede">Deafen should become an instant, no-signup web product that delivers value in under ten seconds. The opportunity is not “perfect noise-cancelling headphones in the browser.” It is building sharper focus tools that feel immediate, private, and linkable.</p>
 
     <div class="hero-grid">
       <div class="panel">
-        <div class="status-row">
-          <div>
-            <p class="eyebrow">Live state</p>
-            <div class="state"><span id="liveDot" class="dot"></span><span id="liveText">Idle</span></div>
-          </div>
-          <div>
-            <p class="eyebrow">Ambient model</p>
-            <div class="state"><span id="learnDot" class="dot"></span><span id="learnText">Waiting to learn</span></div>
-          </div>
+        <p class="eyebrow">Why This Pivot Wins</p>
+        <div class="stat-grid">
+          <div class="stat">Works on web<b>No app</b></div>
+          <div class="stat">Starts instantly<b>No signup</b></div>
+          <div class="stat">Habit potential<b>Daily sessions</b></div>
+          <div class="stat">Growth path<b>SEO + sharing</b></div>
         </div>
-
-        <div class="meter">
-          <div class="db" id="heroDb">0.0</div>
-          <div class="db-note">Estimated experimental anti-phase intensity being sent into your headphones.</div>
-        </div>
-
-        <div class="buttons">
-          <button id="startBtn" class="primary">Start anti-noise</button>
-          <button id="stopBtn" class="secondary" disabled>Stop</button>
-          <button id="monitorBtn" class="soft" disabled>Disable anti-noise</button>
-        </div>
-
-        <div class="slider-wrap">
-          <div class="slider-row">
-            <span>Cancellation strength</span>
-            <strong id="strengthLabel">Balanced</strong>
-          </div>
-          <input id="strength" type="range" min="0" max="100" step="1" value="56">
-          <p class="mini" id="hint">Put headphones on before you start. Dampen samples the room, then sends a restrained anti-phase layer into your headphones.</p>
+        <div class="cta-row">
+          <span class="pill">Fast utility, not science project</span>
+          <span class="pill">Private by default</span>
+          <span class="pill">Built for repeat use</span>
         </div>
       </div>
-
       <div class="panel">
-        <p class="eyebrow">What it does</p>
-        <div class="stat-list">
-          <div class="stat">Adaptive mode<b id="modeText">Balanced</b></div>
-          <div class="stat">Latency<b id="latencyText">Ready</b></div>
-          <div class="stat">Phase layer<b id="filterText">Armed</b></div>
-          <div class="stat">Headphone output<b id="previewText">Off</b></div>
+        <p class="eyebrow">What Deafen Needs</p>
+        <p class="note">To support a strong valuation story later, the product needs retention, repeat weekly usage, direct traffic, and a believable premium path. Engagement helps, but only if users keep coming back because the product reliably solves a real daily problem.</p>
+        <div class="cta-row">
+          <button class="button" type="button" onclick="document.getElementById('paths').scrollIntoView({behavior:'smooth'})">See All 6 Paths</button>
+          <button class="button secondary" type="button" onclick="document.getElementById('recommended').scrollIntoView({behavior:'smooth'})">Jump to Recommendation</button>
         </div>
-        <p class="mini">This version is headphone-focused: it uses the device mic for input and sends a restrained processed anti-phase signal into the headphone output. Steady sounds like fans and AC work better than sudden speech.</p>
       </div>
     </div>
   </section>
 
-  <section class="section">
-    <div class="panel">
-      <p class="eyebrow">Room input</p>
-      <canvas id="vizIn" class="canvas"></canvas>
-      <p class="mini">What the computer or phone microphone hears around you.</p>
+  <div class="section-head" id="paths">
+    <div>
+      <p class="eyebrow">Product Directions</p>
+      <h2>Six Paths For Deafen</h2>
     </div>
-    <div class="panel">
-      <p class="eyebrow">Anti-noise output</p>
-      <canvas id="vizOut" class="canvas"></canvas>
-      <p class="mini">What Dampen is sending into your headphones as an experimental cancellation layer.</p>
+    <p>Every path below is designed to work directly on the website, require no signup, and feel useful fast enough to drive daily sessions.</p>
+  </div>
+
+  <section class="grid">
+    <article class="card">
+      <div class="card-top">
+        <p class="kicker">1. Work Focus</p>
+        <h3>Deafen for Work</h3>
+        <p class="tagline">A one-click focus shield for people doing homework, coding, writing, meetings, and solo work.</p>
+      </div>
+      <div class="card-body">
+        <div class="mini-grid">
+          <div class="mini"><span>Main promise</span><strong>Get into work mode fast</strong></div>
+          <div class="mini"><span>Audience</span><strong>Knowledge workers</strong></div>
+          <div class="mini"><span>Hook</span><strong>One click to lock in</strong></div>
+        </div>
+        <div class="columns">
+          <div class="box">
+            <h4>MVP Features</h4>
+            <ul>
+              <li>One big start button</li>
+              <li>25, 50, and 90 minute work modes</li>
+              <li>Brown noise, office hush, and rain presets</li>
+              <li>Auto-fade in and fade out</li>
+            </ul>
+          </div>
+          <div class="box">
+            <h4>Why It Can Win</h4>
+            <ul>
+              <li>Directly useful in under ten seconds</li>
+              <li>Broad audience with daily repeat potential</li>
+              <li>Easy SEO around focus, work, and study queries</li>
+              <li>Natural premium path through extra scenes and modes</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-top">
+        <p class="kicker">2. Office Noise</p>
+        <h3>Deafen for Open Offices</h3>
+        <p class="tagline">An outcome-first page that asks what is bothering you, then instantly builds the right sound shield.</p>
+      </div>
+      <div class="card-body">
+        <div class="mini-grid">
+          <div class="mini"><span>Main promise</span><strong>Block the exact annoyance</strong></div>
+          <div class="mini"><span>Audience</span><strong>Office workers</strong></div>
+          <div class="mini"><span>Hook</span><strong>Tell us the noise</strong></div>
+        </div>
+        <div class="columns">
+          <div class="box">
+            <h4>MVP Features</h4>
+            <ul>
+              <li>Buttons for coworkers, keyboard, AC, traffic, and cafe noise</li>
+              <li>Automatic matching sound profile</li>
+              <li>Simple intensity slider</li>
+              <li>Focus timer attached to the chosen mode</li>
+            </ul>
+          </div>
+          <div class="box">
+            <h4>Why It Can Win</h4>
+            <ul>
+              <li>Very clear positioning for landing pages</li>
+              <li>Feels customized without asking users to think hard</li>
+              <li>Better conversion than a generic sound mixer</li>
+              <li>Easy workplace-sharing story</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-top">
+        <p class="kicker">3. Student Focus</p>
+        <h3>Deafen for Students</h3>
+        <p class="tagline">A study-first tab that feels built for homework, exam prep, reading, and long library-style sessions.</p>
+      </div>
+      <div class="card-body">
+        <div class="mini-grid">
+          <div class="mini"><span>Main promise</span><strong>Study without drift</strong></div>
+          <div class="mini"><span>Audience</span><strong>Students</strong></div>
+          <div class="mini"><span>Hook</span><strong>Exam mode in one click</strong></div>
+        </div>
+        <div class="columns">
+          <div class="box">
+            <h4>MVP Features</h4>
+            <ul>
+              <li>Homework sprint, reading mode, exam cram presets</li>
+              <li>Gentle timers for deep study blocks</li>
+              <li>ADHD-friendly steady sound profiles</li>
+              <li>Local-only session streaks with no account</li>
+            </ul>
+          </div>
+          <div class="box">
+            <h4>Why It Can Win</h4>
+            <ul>
+              <li>Massive audience with high daily frequency</li>
+              <li>Shareable through TikTok, Reddit, and YouTube</li>
+              <li>Strong back-to-school and finals season spikes</li>
+              <li>Natural fit for creators showing study setups</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-top">
+        <p class="kicker">4. Speech Blur</p>
+        <h3>Speech Blur</h3>
+        <p class="tagline">Instead of pretending to cancel all sound, specifically reduce how distracting nearby voices feel.</p>
+      </div>
+      <div class="card-body">
+        <div class="mini-grid">
+          <div class="mini"><span>Main promise</span><strong>Make voices feel farther away</strong></div>
+          <div class="mini"><span>Audience</span><strong>Anyone near people</strong></div>
+          <div class="mini"><span>Hook</span><strong>Soft, balanced, cocoon</strong></div>
+        </div>
+        <div class="columns">
+          <div class="box">
+            <h4>MVP Features</h4>
+            <ul>
+              <li>Speech-shaped masking presets</li>
+              <li>Soft, balanced, and cocoon modes</li>
+              <li>Headphone-first interface</li>
+              <li>Short explanation of how and when it works</li>
+            </ul>
+          </div>
+          <div class="box">
+            <h4>Why It Can Win</h4>
+            <ul>
+              <li>Much more believable than fake ANC</li>
+              <li>Targets one of the most distracting real-world problems</li>
+              <li>Differentiated from generic rain and lo-fi sites</li>
+              <li>Strong potential brand wedge for Deafen</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-top">
+        <p class="kicker">5. Atmosphere</p>
+        <h3>Deep Work Scenes</h3>
+        <p class="tagline">A premium-feeling web experience built around scenes, moods, and immersive focus environments.</p>
+      </div>
+      <div class="card-body">
+        <div class="mini-grid">
+          <div class="mini"><span>Main promise</span><strong>Enter a whole environment</strong></div>
+          <div class="mini"><span>Audience</span><strong>Creative and aesthetic users</strong></div>
+          <div class="mini"><span>Hook</span><strong>Beautiful enough to share</strong></div>
+        </div>
+        <div class="columns">
+          <div class="box">
+            <h4>MVP Features</h4>
+            <ul>
+              <li>Scenes like coding bunker, rain library, night flight, quiet train</li>
+              <li>Matching timer and subtle motion</li>
+              <li>Quick-switch scene dock</li>
+              <li>Local saved favorites</li>
+            </ul>
+          </div>
+          <div class="box">
+            <h4>Why It Can Win</h4>
+            <ul>
+              <li>Stronger emotional brand than utility-only tools</li>
+              <li>Great for viral screenshots and clips</li>
+              <li>Feels more premium without a signup wall</li>
+              <li>Natural paid expansion path through scene packs</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="card-top">
+        <p class="kicker">6. Quick Utility</p>
+        <h3>Instant Reset</h3>
+        <p class="tagline">A short-session utility for people who need to snap into focus without committing to a full workspace.</p>
+      </div>
+      <div class="card-body">
+        <div class="mini-grid">
+          <div class="mini"><span>Main promise</span><strong>Reset in minutes</strong></div>
+          <div class="mini"><span>Audience</span><strong>Busy general users</strong></div>
+          <div class="mini"><span>Hook</span><strong>3, 10, 25, or 60 minute reset</strong></div>
+        </div>
+        <div class="columns">
+          <div class="box">
+            <h4>MVP Features</h4>
+            <ul>
+              <li>Three minute reset, ten minute reboot, twenty-five minute focus, sixty minute deep work</li>
+              <li>One-click start for each mode</li>
+              <li>Automatic fade out</li>
+              <li>Calm visual state that never asks for setup</li>
+            </ul>
+          </div>
+          <div class="box">
+            <h4>Why It Can Win</h4>
+            <ul>
+              <li>Easier to explain than a full productivity stack</li>
+              <li>Good habit loop for repeat daily sessions</li>
+              <li>Useful for workers, students, and general consumers</li>
+              <li>Feels like a simple web utility people can bookmark</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <div class="section-head" id="recommended">
+    <div>
+      <p class="eyebrow">Recommendation</p>
+      <h2>What Deafen Should Actually Build</h2>
+    </div>
+    <p>The strongest wedge is the one that is most believable, most differentiated, and most likely to get repeat daily use without needing installation or setup.</p>
+  </div>
+
+  <section class="panel">
+    <div class="columns">
+      <div class="box" style="background:var(--accent-soft)">
+        <h4>Best Primary Direction</h4>
+        <p class="note"><strong>Speech Blur / Focus Shield</strong> is the strongest lead concept. It gives Deafen a sharp promise, avoids fake ANC claims, and tackles one of the most annoying distractions people actually want solved: nearby speech.</p>
+      </div>
+      <div class="box" style="background:rgba(241,229,207,0.62)">
+        <h4>Best Backup Direction</h4>
+        <p class="note"><strong>Deafen for Students</strong> is the best growth-friendly secondary direction because it has huge audience size, obvious repeat use, and better odds of organic sharing through study content.</p>
+      </div>
+    </div>
+    <div class="columns" style="margin-top:16px">
+      <div class="box">
+        <h4>Simple Ranking</h4>
+        <ul>
+          <li>Speech Blur / Focus Shield</li>
+          <li>Deafen for Open Offices</li>
+          <li>Deafen for Students</li>
+          <li>Deep Work Scenes</li>
+          <li>Instant Reset</li>
+          <li>Deafen for Work as the broad fallback</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h4>Metric Reality</h4>
+        <ul>
+          <li>Fifty thousand users and strong usage can help tell a story, but valuation comes from retention and growth quality.</li>
+          <li>A crowded category means differentiation matters more than raw ambient sound volume.</li>
+          <li>The winning version of Deafen must solve a felt problem instantly and keep doing so every day.</li>
+        </ul>
+      </div>
     </div>
   </section>
 
-  <section class="section">
-    <div class="panel">
-      <p class="eyebrow">How it behaves</p>
-      <ul class="tips">
-        <li>Uses the device mic when your headset has no mic or you do not want to use it.</li>
-        <li>Builds an adaptive room profile, then outputs an inverted filtered layer for steady ambient sounds.</li>
-        <li>Keeps retraining the room model during quieter moments instead of asking users to manage settings.</li>
-      </ul>
-    </div>
-    <div class="panel">
-      <p class="eyebrow">Best result</p>
-      <ul class="tips">
-        <li>Use closed-back headphones, earbuds, or earphones. Do not use open speakers.</li>
-        <li>Give it one or two seconds of room tone after starting so it can lock onto the space.</li>
-        <li>Use higher strength mostly for fans, AC, road noise, and hum. Sudden voices are harder to cancel.</li>
-      </ul>
-    </div>
-  </section>
-
-  <footer>
-    Signal path: device microphone, room analysis, adaptive anti-noise synthesis, and headphone output. Everything runs locally on-device.
-  </footer>
+  <div class="footer">
+    This page replaces the broken browser ANC experiment with six product directions that can actually live on a website, require no signup, and support a more believable path to growth.
+  </div>
 </div>
-
-<script>
-const workletCode = `
-class AdaptiveDampen extends AudioWorkletProcessor {
-  constructor(){
-    super();
-    this.N = 1024;
-    this.hop = this.N / 4;
-    this.win = new Float32Array(this.N);
-    for (let i = 0; i < this.N; i++) this.win[i] = 0.5 - 0.5 * Math.cos(2 * Math.PI * i / this.N);
-
-    this.inBuf = new Float32Array(this.N);
-    this.inPos = 0;
-    this.outBuf = new Float32Array(this.N * 2);
-    this.readPos = 0;
-    this.writePos = 0;
-
-    this.re = new Float32Array(this.N);
-    this.im = new Float32Array(this.N);
-    this.noiseMag = new Float32Array(this.N / 2 + 1);
-    this.prevGain = new Float32Array(this.N / 2 + 1).fill(1);
-
-    this.learned = false;
-    this.learningFrames = 0;
-    this.silentFrames = 0;
-    this.minFloor = 1e-6;
-
-    this.strength = 0.56;
-    this.suppressDb = 15;
-    this.reverbAmt = 0.42;
-    this.makeup = 1.09;
-    this.outputMix = 0.38;
-    this.directLeak = 0.02;
-    this.reduceAccum = 0;
-    this.reduceFrames = 0;
-
-    this.port.onmessage = (event) => {
-      const data = event.data;
-      if (data.type === 'ctl') {
-        this.strength = data.strength;
-        this.suppressDb = 8 + this.strength * 18;
-        this.reverbAmt = 0.18 + this.strength * 0.62;
-        this.makeup = 0.72 + this.strength * 0.22;
-        this.outputMix = 0.18 + this.strength * 0.34;
-        this.directLeak = 0.01 + this.strength * 0.06;
-      }
-    };
-
-    this.buildFFT();
-  }
-
-  buildFFT(){
-    const N = this.N;
-    this.rev = new Uint32Array(N);
-    const bits = Math.log2(N);
-    for (let i = 0; i < N; i++) {
-      let x = i;
-      let r = 0;
-      for (let j = 0; j < bits; j++) {
-        r = (r << 1) | (x & 1);
-        x >>= 1;
-      }
-      this.rev[i] = r;
-    }
-    this.cos = new Float32Array(N / 2);
-    this.sin = new Float32Array(N / 2);
-    for (let i = 0; i < N / 2; i++) {
-      this.cos[i] = Math.cos(-2 * Math.PI * i / N);
-      this.sin[i] = Math.sin(-2 * Math.PI * i / N);
-    }
-  }
-
-  fft(re, im, inv){
-    const N = this.N;
-    for (let i = 0; i < N; i++) {
-      const j = this.rev[i];
-      if (j > i) {
-        let t = re[i]; re[i] = re[j]; re[j] = t;
-        t = im[i]; im[i] = im[j]; im[j] = t;
-      }
-    }
-    for (let len = 2; len <= N; len <<= 1) {
-      const half = len >> 1;
-      const step = N / len;
-      for (let i = 0; i < N; i += len) {
-        for (let k = 0, idx = 0; k < half; k++, idx += step) {
-          let c = this.cos[idx];
-          let s = this.sin[idx];
-          if (inv) s = -s;
-          const a = i + k;
-          const b = i + k + half;
-          const tr = re[b] * c - im[b] * s;
-          const ti = re[b] * s + im[b] * c;
-          re[b] = re[a] - tr;
-          im[b] = im[a] - ti;
-          re[a] += tr;
-          im[a] += ti;
-        }
-      }
-    }
-    if (inv) {
-      for (let i = 0; i < N; i++) {
-        re[i] /= N;
-        im[i] /= N;
-      }
-    }
-  }
-
-  updateNoiseProfile(magnitudes, frameEnergy){
-    const alpha = this.learned ? 0.985 : 0.9;
-    const noiseAlpha = frameEnergy < 0.0018 ? alpha : 0.9995;
-    for (let k = 0; k < magnitudes.length; k++) {
-      const current = magnitudes[k];
-      const existing = this.noiseMag[k] || current;
-      const blended = existing * noiseAlpha + current * (1 - noiseAlpha);
-      this.noiseMag[k] = Math.max(this.minFloor, blended);
-    }
-    this.learningFrames++;
-    if (!this.learned && this.learningFrames > 20) {
-      this.learned = true;
-      this.port.postMessage({ type: 'learned' });
-    }
-  }
-
-  processFrame(){
-    const N = this.N;
-    const H = N / 2;
-    let frameEnergy = 0;
-    for (let i = 0; i < N; i++) {
-      const sample = this.inBuf[i] * this.win[i];
-      this.re[i] = sample;
-      this.im[i] = 0;
-      frameEnergy += sample * sample;
-    }
-    frameEnergy /= N;
-
-    this.fft(this.re, this.im, false);
-
-    const mags = new Float32Array(H + 1);
-    for (let k = 0; k <= H; k++) mags[k] = Math.hypot(this.re[k], this.im[k]);
-
-    if (frameEnergy < 0.0018) this.silentFrames++;
-    else this.silentFrames = 0;
-
-    if (this.silentFrames > 1 || !this.learned) this.updateNoiseProfile(mags, frameEnergy);
-
-    const floorBoost = Math.pow(10, this.suppressDb / 20);
-    let reduceSum = 0;
-    let reduceCount = 0;
-
-    for (let k = 0; k <= H; k++) {
-      const mag = mags[k];
-      const noiseFloor = Math.max(this.minFloor, this.noiseMag[k] * floorBoost);
-      let gain = mag > 1e-9 ? Math.max(0.03, (mag - noiseFloor) / (mag + 1e-9)) : 0.03;
-      const ratio = mag / (noiseFloor + 1e-9);
-      if (ratio < 1.7) gain *= Math.max(0.08, 1 - this.reverbAmt * (1 - ratio / 1.7));
-      gain = 0.72 * gain + 0.28 * this.prevGain[k];
-      this.prevGain[k] = gain;
-
-      const emphasis = 0.55 + this.strength * 0.45;
-      const antiGain = Math.min(0.85, (1 - gain) * emphasis + this.directLeak);
-      this.re[k] *= -antiGain;
-      this.im[k] *= -antiGain;
-      if (k > 0 && k < H) {
-        this.re[N - k] = this.re[k];
-        this.im[N - k] = -this.im[k];
-      }
-
-      if (mag > noiseFloor * 0.45) {
-        reduceSum += 1 - gain;
-        reduceCount++;
-      }
-    }
-
-    if (reduceCount) {
-      this.reduceAccum += reduceSum / reduceCount;
-      this.reduceFrames++;
-    }
-
-    this.fft(this.re, this.im, true);
-    for (let i = 0; i < N; i++) {
-      const sample = this.re[i] * this.win[i] * this.makeup * this.outputMix;
-      this.outBuf[(this.writePos + i) % (N * 2)] += Math.max(-0.45, Math.min(0.45, sample));
-    }
-  }
-
-  process(inputs, outputs){
-    const input = inputs[0];
-    const output = outputs[0];
-    if (!input || !input[0] || !output || !output[0]) return true;
-
-    const x = input[0];
-    const y = output[0];
-    for (let i = 0; i < x.length; i++) {
-      this.inBuf[this.inPos++] = x[i];
-      y[i] = Math.max(-0.45, Math.min(0.45, this.outBuf[this.readPos]));
-      this.outBuf[this.readPos] = 0;
-      this.readPos = (this.readPos + 1) % (this.N * 2);
-
-      if (this.inPos >= this.N) {
-        this.processFrame();
-        this.writePos = (this.writePos + this.hop) % (this.N * 2);
-        this.inBuf.copyWithin(0, this.hop);
-        this.inPos = this.N - this.hop;
-      }
-    }
-
-    if (this.reduceFrames >= 18) {
-      const avg = this.reduceAccum / this.reduceFrames;
-      const db = -20 * Math.log10(Math.max(1e-3, 1 - avg));
-      this.port.postMessage({ type: 'reduce', db });
-      this.reduceAccum = 0;
-      this.reduceFrames = 0;
-    }
-    return true;
-  }
-}
-
-registerProcessor('adaptive-dampen', AdaptiveDampen);
-`;
-
-let ctx, stream, sourceNode, hpFilter, workletNode, analyserIn, analyserOut, previewGain;
-let outputEnabled = false;
-
-const $ = (id) => document.getElementById(id);
-
-function strengthProfile(value){
-  if (value < 34) return { label: 'Light', filter: 'Gentle', strength: value / 100 };
-  if (value < 67) return { label: 'Balanced', filter: 'Armed', strength: value / 100 };
-  return { label: 'Strong', filter: 'Locked', strength: value / 100 };
-}
-
-function updateStrengthUI(){
-  const profile = strengthProfile(+$('strength').value);
-  $('strengthLabel').textContent = profile.label;
-  $('modeText').textContent = profile.label;
-  $('filterText').textContent = profile.filter;
-  if (workletNode) {
-    workletNode.port.postMessage({ type: 'ctl', strength: profile.strength });
-  }
-}
-
-function updatePreviewUI(){
-  $('previewText').textContent = outputEnabled ? 'Live' : 'Off';
-  $('monitorBtn').textContent = outputEnabled ? 'Disable anti-noise' : 'Enable anti-noise';
-  if (previewGain) previewGain.gain.value = outputEnabled ? 1 : 0;
-}
-
-function updateLiveState(text, dotClass){
-  $('liveText').textContent = text;
-  $('liveDot').className = dotClass;
-}
-
-function updateLearnState(text, dotClass){
-  $('learnText').textContent = text;
-  $('learnDot').className = dotClass;
-}
-
-async function start(){
-  ctx = new (window.AudioContext || window.webkitAudioContext)({ latencyHint: 'interactive' });
-  const blob = new Blob([workletCode], { type: 'application/javascript' });
-  await ctx.audioWorklet.addModule(URL.createObjectURL(blob));
-
-  stream = await navigator.mediaDevices.getUserMedia({
-    audio: {
-      echoCancellation: true,
-      noiseSuppression: false,
-      autoGainControl: false,
-      channelCount: 1
-    }
-  });
-
-  sourceNode = ctx.createMediaStreamSource(stream);
-  hpFilter = ctx.createBiquadFilter();
-  hpFilter.type = 'highpass';
-  hpFilter.frequency.value = 85;
-
-  workletNode = new AudioWorkletNode(ctx, 'adaptive-dampen', {
-    numberOfInputs: 1,
-    numberOfOutputs: 1,
-    channelCount: 1
-  });
-
-  analyserIn = ctx.createAnalyser();
-  analyserOut = ctx.createAnalyser();
-  analyserIn.fftSize = 2048;
-  analyserOut.fftSize = 2048;
-
-  previewGain = ctx.createGain();
-  previewGain.gain.value = 1;
-  outputEnabled = true;
-
-  sourceNode.connect(analyserIn);
-  sourceNode.connect(hpFilter);
-  hpFilter.connect(workletNode);
-  workletNode.connect(analyserOut);
-  workletNode.connect(previewGain);
-  previewGain.connect(ctx.destination);
-
-  workletNode.port.onmessage = (event) => {
-    const data = event.data;
-    if (data.type === 'learned') updateLearnState('Actively adapting', 'dot live');
-    if (data.type === 'reduce') $('heroDb').textContent = data.db.toFixed(1);
-  };
-
-  updateStrengthUI();
-  updatePreviewUI();
-
-  $('startBtn').disabled = true;
-  $('stopBtn').disabled = false;
-  $('monitorBtn').disabled = false;
-  $('strength').disabled = false;
-  $('latencyText').textContent = '~' + Math.round(1024 / ctx.sampleRate * 1000) + ' ms';
-  $('hint').textContent = 'Anti-noise is feeding your headphones now. Give it a moment of steady room sound so it can tune itself.';
-  updateLiveState('Anti-noise live', 'dot live');
-  updateLearnState('Learning room tone', 'dot warn');
-  draw();
-}
-
-function stop(){
-  outputEnabled = false;
-  updatePreviewUI();
-  if (stream) stream.getTracks().forEach((track) => track.stop());
-  if (ctx) ctx.close();
-
-  ctx = null;
-  stream = null;
-  sourceNode = null;
-  hpFilter = null;
-  workletNode = null;
-  analyserIn = null;
-  analyserOut = null;
-  previewGain = null;
-
-  $('startBtn').disabled = false;
-  $('stopBtn').disabled = true;
-  $('monitorBtn').disabled = true;
-  $('heroDb').textContent = '0.0';
-  $('latencyText').textContent = 'Ready';
-  $('hint').textContent = 'Put headphones on before you start. Dampen samples the room for a moment, then keeps adapting in the background.';
-  updateLiveState('Idle', 'dot');
-  updateLearnState('Waiting to learn', 'dot');
-}
-
-function draw(){
-  if (!ctx) return;
-  requestAnimationFrame(draw);
-  spectrum($('vizIn'), analyserIn, '#6da9da');
-  spectrum($('vizOut'), analyserOut, '#0f7b6c');
-}
-
-function spectrum(canvas, analyser, color){
-  if (!analyser) return;
-  const width = canvas.clientWidth;
-  const height = canvas.clientHeight;
-  const dpr = window.devicePixelRatio || 1;
-  if (canvas.width !== width * dpr || canvas.height !== height * dpr) {
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
-  }
-
-  const ctx2d = canvas.getContext('2d');
-  ctx2d.setTransform(dpr, 0, 0, dpr, 0, 0);
-  ctx2d.clearRect(0, 0, width, height);
-
-  const data = new Uint8Array(analyser.frequencyBinCount);
-  analyser.getByteFrequencyData(data);
-  const bars = 72;
-  const step = Math.max(1, Math.floor((data.length * 0.6) / bars));
-
-  for (let i = 0; i < bars; i++) {
-    let value = 0;
-    for (let j = 0; j < step; j++) value = Math.max(value, data[i * step + j] || 0);
-    const barHeight = (value / 255) * (height - 12);
-    const x = i * (width / bars);
-    ctx2d.fillStyle = color;
-    ctx2d.globalAlpha = 0.22 + (value / 255) * 0.78;
-    ctx2d.fillRect(x + 1.5, height - barHeight - 4, (width / bars) - 3, barHeight);
-  }
-  ctx2d.globalAlpha = 1;
-}
-
-$('startBtn').onclick = () => {
-  start().catch((error) => {
-    $('hint').textContent = 'Microphone access failed: ' + error.message;
-    updateLiveState('Mic blocked', 'dot warn');
-  });
-};
-
-$('stopBtn').onclick = stop;
-$('monitorBtn').onclick = () => {
-  outputEnabled = !outputEnabled;
-  updatePreviewUI();
-};
-$('strength').oninput = updateStrengthUI;
-$('strength').disabled = false;
-updateStrengthUI();
-updatePreviewUI();
-</script>
 </body>
 </html>
