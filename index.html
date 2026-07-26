@@ -256,7 +256,7 @@
 
         <div class="meter">
           <div class="db" id="heroDb">0.0</div>
-          <div class="db-note">Estimated cancellation and coverage intensity being sent into your headphones.</div>
+          <div class="db-note">Estimated experimental anti-phase intensity being sent into your headphones.</div>
         </div>
 
         <div class="buttons">
@@ -271,7 +271,7 @@
             <strong id="strengthLabel">Balanced</strong>
           </div>
           <input id="strength" type="range" min="0" max="100" step="1" value="56">
-          <p class="mini" id="hint">Put headphones on before you start. Dampen samples the room, then drives a stronger anti-noise and masking layer into your headphones.</p>
+          <p class="mini" id="hint">Put headphones on before you start. Dampen samples the room, then sends a restrained anti-phase layer into your headphones.</p>
         </div>
       </div>
 
@@ -283,7 +283,7 @@
           <div class="stat">Phase layer<b id="filterText">Armed</b></div>
           <div class="stat">Headphone output<b id="previewText">Off</b></div>
         </div>
-        <p class="mini">This version is headphone-focused: it uses the device mic for input and sends processed anti-noise plus a coverage bed into the headphone output. Steady sounds like fans and AC will work better than sudden speech.</p>
+        <p class="mini">This version is headphone-focused: it uses the device mic for input and sends a restrained processed anti-phase signal into the headphone output. Steady sounds like fans and AC work better than sudden speech.</p>
       </div>
     </div>
   </section>
@@ -297,7 +297,7 @@
     <div class="panel">
       <p class="eyebrow">Anti-noise output</p>
       <canvas id="vizOut" class="canvas"></canvas>
-      <p class="mini">What Dampen is sending into your headphones as a cancellation and coverage layer.</p>
+      <p class="mini">What Dampen is sending into your headphones as an experimental cancellation layer.</p>
     </div>
   </section>
 
@@ -306,7 +306,7 @@
       <p class="eyebrow">How it behaves</p>
       <ul class="tips">
         <li>Uses the device mic when your headset has no mic or you do not want to use it.</li>
-        <li>Builds an adaptive room profile, then outputs an inverted filtered layer plus masking energy for steady ambient sounds.</li>
+        <li>Builds an adaptive room profile, then outputs an inverted filtered layer for steady ambient sounds.</li>
         <li>Keeps retraining the room model during quieter moments instead of asking users to manage settings.</li>
       </ul>
     </div>
@@ -355,10 +355,8 @@ class AdaptiveDampen extends AudioWorkletProcessor {
     this.suppressDb = 15;
     this.reverbAmt = 0.42;
     this.makeup = 1.09;
-    this.outputMix = 0.7;
-    this.maskingMix = 0.22;
-    this.directLeak = 0.14;
-    this.phaseJitter = 0;
+    this.outputMix = 0.38;
+    this.directLeak = 0.02;
     this.reduceAccum = 0;
     this.reduceFrames = 0;
 
@@ -368,19 +366,13 @@ class AdaptiveDampen extends AudioWorkletProcessor {
         this.strength = data.strength;
         this.suppressDb = 8 + this.strength * 18;
         this.reverbAmt = 0.18 + this.strength * 0.62;
-        this.makeup = 0.95 + this.strength * 0.65;
-        this.outputMix = 0.75 + this.strength * 1.35;
-        this.maskingMix = 0.12 + this.strength * 0.5;
-        this.directLeak = 0.06 + this.strength * 0.22;
+        this.makeup = 0.72 + this.strength * 0.22;
+        this.outputMix = 0.18 + this.strength * 0.34;
+        this.directLeak = 0.01 + this.strength * 0.06;
       }
     };
 
     this.buildFFT();
-  }
-
-  rand(){
-    this.phaseJitter = (1664525 * (this.phaseJitter + 1013904223) + 1013904223) >>> 0;
-    return (this.phaseJitter / 4294967295) * 2 - 1;
   }
 
   buildFFT(){
@@ -491,8 +483,8 @@ class AdaptiveDampen extends AudioWorkletProcessor {
       gain = 0.72 * gain + 0.28 * this.prevGain[k];
       this.prevGain[k] = gain;
 
-      const emphasis = 1 + this.strength * 0.9;
-      const antiGain = Math.min(2.4, (1 - gain) * emphasis + this.directLeak);
+      const emphasis = 0.55 + this.strength * 0.45;
+      const antiGain = Math.min(0.85, (1 - gain) * emphasis + this.directLeak);
       this.re[k] *= -antiGain;
       this.im[k] *= -antiGain;
       if (k > 0 && k < H) {
@@ -513,14 +505,8 @@ class AdaptiveDampen extends AudioWorkletProcessor {
 
     this.fft(this.re, this.im, true);
     for (let i = 0; i < N; i++) {
-      const t = i / N;
-      const shapedNoise =
-        this.rand() * 0.55 +
-        Math.sin(2 * Math.PI * (110 + 220 * this.strength) * t) * 0.18 +
-        Math.sin(2 * Math.PI * (420 + 380 * this.strength) * t) * 0.08;
-      const masking = shapedNoise * this.maskingMix * (0.55 + this.strength);
-      const sample = this.re[i] * this.win[i] * this.makeup * this.outputMix + masking;
-      this.outBuf[(this.writePos + i) % (N * 2)] += Math.max(-1, Math.min(1, sample));
+      const sample = this.re[i] * this.win[i] * this.makeup * this.outputMix;
+      this.outBuf[(this.writePos + i) % (N * 2)] += Math.max(-0.45, Math.min(0.45, sample));
     }
   }
 
@@ -533,7 +519,7 @@ class AdaptiveDampen extends AudioWorkletProcessor {
     const y = output[0];
     for (let i = 0; i < x.length; i++) {
       this.inBuf[this.inPos++] = x[i];
-      y[i] = Math.max(-1, Math.min(1, this.outBuf[this.readPos]));
+      y[i] = Math.max(-0.45, Math.min(0.45, this.outBuf[this.readPos]));
       this.outBuf[this.readPos] = 0;
       this.readPos = (this.readPos + 1) % (this.N * 2);
 
