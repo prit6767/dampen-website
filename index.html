@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dampen — Adaptive Headphone Noise Reduction</title>
+<title>Dampen — Experimental Anti-Noise for Any Headphones</title>
 <style>
   :root{
     --bg:#f2efe8;
@@ -234,12 +234,12 @@
       <div class="mark">D</div>
       <div>
         <p class="eyebrow">Dampen</p>
-        <p style="margin:0;color:var(--muted)">Adaptive headphone noise reduction in the browser</p>
+        <p style="margin:0;color:var(--muted)">Experimental anti-noise output for regular headphones</p>
       </div>
     </div>
 
-    <h1>Put it on and let it learn.</h1>
-    <p class="lede">Dampen listens in the background, builds a live profile of your environment, and cleans the microphone feed automatically. It is designed for everyday studying, calls, and focused work without making people babysit settings.</p>
+    <h1>Use any headphones. Let Dampen fight the room.</h1>
+    <p class="lede">Dampen listens through your computer or phone mic, estimates the sound around you, and sends an anti-noise style signal into your headphones. It is an experimental browser version of noise cancellation for studying, focus, and everyday use.</p>
 
     <div class="hero-grid">
       <div class="panel">
@@ -249,20 +249,20 @@
             <div class="state"><span id="liveDot" class="dot"></span><span id="liveText">Idle</span></div>
           </div>
           <div>
-            <p class="eyebrow">Environment profile</p>
+            <p class="eyebrow">Ambient model</p>
             <div class="state"><span id="learnDot" class="dot"></span><span id="learnText">Waiting to learn</span></div>
           </div>
         </div>
 
         <div class="meter">
           <div class="db" id="heroDb">0.0</div>
-          <div class="db-note">Estimated noise reduction in your cleaned mic feed.</div>
+          <div class="db-note">Estimated anti-noise intensity being sent into your headphones.</div>
         </div>
 
         <div class="buttons">
-          <button id="startBtn" class="primary">Start dampening</button>
+          <button id="startBtn" class="primary">Start anti-noise</button>
           <button id="stopBtn" class="secondary" disabled>Stop</button>
-          <button id="monitorBtn" class="soft" disabled>Preview cleaned audio</button>
+          <button id="monitorBtn" class="soft" disabled>Disable anti-noise</button>
         </div>
 
         <div class="slider-wrap">
@@ -271,7 +271,7 @@
             <strong id="strengthLabel">Balanced</strong>
           </div>
           <input id="strength" type="range" min="0" max="100" step="1" value="56">
-          <p class="mini" id="hint">Start once, then stay quiet for a moment. Dampen keeps retraining gently in the background as your room changes.</p>
+          <p class="mini" id="hint">Put headphones on before you start. Dampen samples the room for a moment, then keeps adapting in the background.</p>
         </div>
       </div>
 
@@ -280,24 +280,24 @@
         <div class="stat-list">
           <div class="stat">Adaptive mode<b id="modeText">Balanced</b></div>
           <div class="stat">Latency<b id="latencyText">Ready</b></div>
-          <div class="stat">Rumble filter<b id="filterText">On</b></div>
-          <div class="stat">Preview<b id="previewText">Muted</b></div>
+          <div class="stat">Phase layer<b id="filterText">Armed</b></div>
+          <div class="stat">Headphone output<b id="previewText">Off</b></div>
         </div>
-        <p class="mini">This cleans the mic signal going through the app. Browsers cannot erase the outside world from your ears like system-level headphone ANC, but they can aggressively suppress what your microphone picks up.</p>
+        <p class="mini">This version is headphone-focused: it uses the device mic for input and sends processed anti-noise into the headphone output. Steady sounds like fans and AC will work better than sudden speech.</p>
       </div>
     </div>
   </section>
 
   <section class="section">
     <div class="panel">
-      <p class="eyebrow">Input energy</p>
+      <p class="eyebrow">Room input</p>
       <canvas id="vizIn" class="canvas"></canvas>
-      <p class="mini">Raw microphone activity from your room.</p>
+      <p class="mini">What the computer or phone microphone hears around you.</p>
     </div>
     <div class="panel">
-      <p class="eyebrow">Cleaned output</p>
+      <p class="eyebrow">Anti-noise output</p>
       <canvas id="vizOut" class="canvas"></canvas>
-      <p class="mini">What Dampen is sending through its cleanup engine.</p>
+      <p class="mini">What Dampen is sending into your headphones as a cancellation layer.</p>
     </div>
   </section>
 
@@ -305,23 +305,23 @@
     <div class="panel">
       <p class="eyebrow">How it behaves</p>
       <ul class="tips">
-        <li>Starts with speaker-safe preview muted to avoid echo loops.</li>
-        <li>Uses browser echo control, then layers adaptive spectral suppression on top.</li>
-        <li>Refreshes the room profile during low-speech moments instead of asking users to click relearn.</li>
+        <li>Uses the device mic when your headset has no mic or you do not want to use it.</li>
+        <li>Builds an adaptive room profile, then outputs an inverted filtered layer for steady ambient sounds.</li>
+        <li>Keeps retraining the room model during quieter moments instead of asking users to manage settings.</li>
       </ul>
     </div>
     <div class="panel">
       <p class="eyebrow">Best result</p>
       <ul class="tips">
-        <li>Use headphones or keep preview muted if your speakers are open.</li>
-        <li>Give it one or two seconds of room tone after starting.</li>
-        <li>Use higher strength only when the room is very noisy, since stronger cleanup can thin out voices.</li>
+        <li>Use closed-back headphones, earbuds, or earphones. Do not use open speakers.</li>
+        <li>Give it one or two seconds of room tone after starting so it can lock onto the space.</li>
+        <li>Use higher strength mostly for fans, AC, road noise, and hum. Sudden voices are harder to cancel.</li>
       </ul>
     </div>
   </section>
 
   <footer>
-    Signal path: browser mic controls, high-pass cleanup, adaptive spectral subtraction, and voice-aware gain shaping. Everything runs locally on-device.
+    Signal path: device microphone, room analysis, adaptive anti-noise synthesis, and headphone output. Everything runs locally on-device.
   </footer>
 </div>
 
@@ -355,6 +355,7 @@ class AdaptiveDampen extends AudioWorkletProcessor {
     this.suppressDb = 15;
     this.reverbAmt = 0.42;
     this.makeup = 1.09;
+    this.outputMix = 0.7;
     this.reduceAccum = 0;
     this.reduceFrames = 0;
 
@@ -364,7 +365,8 @@ class AdaptiveDampen extends AudioWorkletProcessor {
         this.strength = data.strength;
         this.suppressDb = 8 + this.strength * 18;
         this.reverbAmt = 0.18 + this.strength * 0.62;
-        this.makeup = 1 + this.strength * 0.18;
+        this.makeup = 0.8 + this.strength * 0.3;
+        this.outputMix = 0.28 + this.strength * 0.62;
       }
     };
 
@@ -479,8 +481,8 @@ class AdaptiveDampen extends AudioWorkletProcessor {
       gain = 0.72 * gain + 0.28 * this.prevGain[k];
       this.prevGain[k] = gain;
 
-      this.re[k] *= gain;
-      this.im[k] *= gain;
+      this.re[k] *= -gain;
+      this.im[k] *= -gain;
       if (k > 0 && k < H) {
         this.re[N - k] = this.re[k];
         this.im[N - k] = -this.im[k];
@@ -499,7 +501,7 @@ class AdaptiveDampen extends AudioWorkletProcessor {
 
     this.fft(this.re, this.im, true);
     for (let i = 0; i < N; i++) {
-      this.outBuf[(this.writePos + i) % (N * 2)] += this.re[i] * this.win[i] * this.makeup;
+      this.outBuf[(this.writePos + i) % (N * 2)] += this.re[i] * this.win[i] * this.makeup * this.outputMix;
     }
   }
 
@@ -539,14 +541,14 @@ registerProcessor('adaptive-dampen', AdaptiveDampen);
 `;
 
 let ctx, stream, sourceNode, hpFilter, workletNode, analyserIn, analyserOut, previewGain;
-let previewEnabled = false;
+let outputEnabled = false;
 
 const $ = (id) => document.getElementById(id);
 
 function strengthProfile(value){
   if (value < 34) return { label: 'Light', filter: 'Gentle', strength: value / 100 };
-  if (value < 67) return { label: 'Balanced', filter: 'On', strength: value / 100 };
-  return { label: 'Strong', filter: 'Aggressive', strength: value / 100 };
+  if (value < 67) return { label: 'Balanced', filter: 'Armed', strength: value / 100 };
+  return { label: 'Strong', filter: 'Locked', strength: value / 100 };
 }
 
 function updateStrengthUI(){
@@ -560,9 +562,9 @@ function updateStrengthUI(){
 }
 
 function updatePreviewUI(){
-  $('previewText').textContent = previewEnabled ? 'Live' : 'Muted';
-  $('monitorBtn').textContent = previewEnabled ? 'Mute preview' : 'Preview cleaned audio';
-  if (previewGain) previewGain.gain.value = previewEnabled ? 1 : 0;
+  $('previewText').textContent = outputEnabled ? 'Live' : 'Off';
+  $('monitorBtn').textContent = outputEnabled ? 'Disable anti-noise' : 'Enable anti-noise';
+  if (previewGain) previewGain.gain.value = outputEnabled ? 1 : 0;
 }
 
 function updateLiveState(text, dotClass){
@@ -583,8 +585,8 @@ async function start(){
   stream = await navigator.mediaDevices.getUserMedia({
     audio: {
       echoCancellation: true,
-      noiseSuppression: true,
-      autoGainControl: true,
+      noiseSuppression: false,
+      autoGainControl: false,
       channelCount: 1
     }
   });
@@ -606,7 +608,8 @@ async function start(){
   analyserOut.fftSize = 2048;
 
   previewGain = ctx.createGain();
-  previewGain.gain.value = 0;
+  previewGain.gain.value = 1;
+  outputEnabled = true;
 
   sourceNode.connect(analyserIn);
   sourceNode.connect(hpFilter);
@@ -629,14 +632,14 @@ async function start(){
   $('monitorBtn').disabled = false;
   $('strength').disabled = false;
   $('latencyText').textContent = '~' + Math.round(1024 / ctx.sampleRate * 1000) + ' ms';
-  $('hint').textContent = 'Dampen is learning the room now and will keep refreshing the noise profile quietly in the background.';
-  updateLiveState('Dampening live', 'dot live');
+  $('hint').textContent = 'Anti-noise is feeding your headphones now. Give it a moment of steady room sound so it can tune itself.';
+  updateLiveState('Anti-noise live', 'dot live');
   updateLearnState('Learning room tone', 'dot warn');
   draw();
 }
 
 function stop(){
-  previewEnabled = false;
+  outputEnabled = false;
   updatePreviewUI();
   if (stream) stream.getTracks().forEach((track) => track.stop());
   if (ctx) ctx.close();
@@ -655,7 +658,7 @@ function stop(){
   $('monitorBtn').disabled = true;
   $('heroDb').textContent = '0.0';
   $('latencyText').textContent = 'Ready';
-  $('hint').textContent = 'Start once, then stay quiet for a moment. Dampen keeps retraining gently in the background as your room changes.';
+  $('hint').textContent = 'Put headphones on before you start. Dampen samples the room for a moment, then keeps adapting in the background.';
   updateLiveState('Idle', 'dot');
   updateLearnState('Waiting to learn', 'dot');
 }
@@ -707,7 +710,7 @@ $('startBtn').onclick = () => {
 
 $('stopBtn').onclick = stop;
 $('monitorBtn').onclick = () => {
-  previewEnabled = !previewEnabled;
+  outputEnabled = !outputEnabled;
   updatePreviewUI();
 };
 $('strength').oninput = updateStrengthUI;
