@@ -29,18 +29,16 @@
   .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
   button{font:inherit;color:var(--txt);background:#1a2432;border:1px solid var(--line);
     padding:11px 18px;border-radius:10px;cursor:pointer;transition:.15s;font-weight:600}
-  button:hover{border-color:#2f3e52;transform:translateY(-1px)}
+  button:hover:not(:disabled){border-color:#2f3e52;transform:translateY(-1px)}
   button:disabled{opacity:.4;cursor:not-allowed;transform:none}
   button.primary{background:linear-gradient(135deg,var(--accent),#2bbf80);color:#04120b;border:none}
   button.danger{background:#2a1518;border-color:#4a2226;color:var(--warn)}
-  button.on{outline:2px solid var(--accent);outline-offset:1px}
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
   @media(max-width:720px){.grid{grid-template-columns:1fr}}
   label.ctl{display:block;margin:16px 0 0}
   label.ctl .lab{display:flex;justify-content:space-between;font-size:13px;color:var(--dim);margin-bottom:7px}
   label.ctl .lab b{color:var(--txt);font-variant-numeric:tabular-nums}
-  input[type=range]{width:100%;-webkit-appearance:none;height:5px;border-radius:5px;
-    background:#233042;outline:none}
+  input[type=range]{width:100%;-webkit-appearance:none;height:5px;border-radius:5px;background:#233042;outline:none}
   input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;
     background:var(--accent);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.4)}
   .viz{width:100%;height:130px;background:#070b11;border:1px solid var(--line);border-radius:10px;display:block}
@@ -59,6 +57,21 @@
   a{color:var(--accent2);text-decoration:none}
   .note{font-size:12px;color:var(--dim);margin-top:10px}
   .kbd{background:#1a2432;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:12px}
+  .presets{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+  .preset{padding:9px 14px;font-size:13px;background:#0d131c}
+  .preset.active{outline:2px solid var(--accent);outline-offset:1px;background:#132018}
+  .hero{display:flex;align-items:baseline;gap:10px;margin-top:2px}
+  .hero .big{font-size:40px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums;letter-spacing:-1px}
+  .hero .unit{color:var(--dim);font-size:14px}
+  .switch{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--dim);cursor:pointer;user-select:none}
+  .switch input{display:none}
+  .track{width:38px;height:22px;border-radius:20px;background:#233042;position:relative;transition:.15s}
+  .track::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.15s}
+  .switch input:checked + .track{background:var(--accent)}
+  .switch input:checked + .track::after{transform:translateX(16px)}
+  .rec{display:inline-flex;align-items:center;gap:7px}
+  .rec .rd{width:10px;height:10px;border-radius:50%;background:var(--warn)}
+  .recording .rd{animation:pulse 1s infinite}
 </style>
 </head>
 <body>
@@ -80,18 +93,40 @@
       <div class="row">
         <button id="startBtn" class="primary">▶ Start microphone</button>
         <button id="stopBtn" class="danger" disabled>■ Stop</button>
-        <button id="learnBtn" disabled title="Stay quiet for a moment while it samples your room's noise floor">🎧 Learn room noise</button>
       </div>
       <span class="pill"><span id="liveDot" class="dot"></span><span id="liveTxt">idle</span></span>
     </div>
-    <div class="note" id="hint">Click <b>Start microphone</b>, then <b>Learn room noise</b> while you stay silent for ~1.5s. Toggle A/B to hear the difference. Use headphones to avoid feedback.</div>
 
-    <div style="margin-top:18px">
-      <p class="vlabel">Output monitor</p>
-      <div class="toggle" style="max-width:340px">
-        <button id="btnClean" class="active">Cleaned</button>
-        <button id="btnRaw">Bypass (raw)</button>
-        <button id="btnMute">Mute monitor</button>
+    <div class="hero">
+      <span class="big" id="heroDb">0.0</span><span class="unit">dB of noise removed</span>
+    </div>
+
+    <div class="row" style="justify-content:space-between;margin-top:14px">
+      <label class="switch"><input type="checkbox" id="autoLearn" checked><span class="track"></span>Auto-learn room noise on silence</label>
+      <button id="learnBtn" disabled title="Manually resample the room noise floor">🎧 Re-learn now</button>
+    </div>
+    <div class="note" id="hint">Click <b>Start microphone</b>. It listens for a brief silence and learns your room automatically. Hold <span class="kbd">Space</span> to hear the raw mic (A/B). Use headphones to avoid feedback.</div>
+  </div>
+
+  <div class="card">
+    <p class="vlabel">Presets</p>
+    <div class="presets" id="presets"></div>
+
+    <div style="margin-top:18px" class="row">
+      <div style="flex:1;min-width:240px">
+        <p class="vlabel">Output monitor</p>
+        <div class="toggle" style="max-width:340px">
+          <button id="btnClean" class="active">Cleaned</button>
+          <button id="btnRaw">Bypass (raw)</button>
+          <button id="btnMute">Mute monitor</button>
+        </div>
+      </div>
+      <div>
+        <p class="vlabel">Record cleaned audio</p>
+        <div class="row">
+          <button id="recBtn" class="rec" disabled><span class="rd"></span><span id="recTxt">Record</span></button>
+          <span class="pill" id="recTime" style="display:none">00:00</span>
+        </div>
       </div>
     </div>
   </div>
@@ -108,6 +143,7 @@
   </div>
 
   <div class="card">
+    <p class="vlabel" style="margin-bottom:14px">Advanced</p>
     <label class="ctl">
       <span class="lab">Noise suppression <b><span id="vSuppress">14</span> dB</b></span>
       <input id="suppress" type="range" min="0" max="30" step="1" value="14">
@@ -126,7 +162,6 @@
     </label>
     <div class="stat">
       <span>Noise profile: <b id="statProfile">not learned</b></span>
-      <span>Reduction: <b id="statReduce">0.0 dB</b></span>
       <span>Latency: <b id="statLat">~11 ms</b></span>
     </div>
   </div>
@@ -141,44 +176,30 @@
 // ============ AudioWorklet DSP (STFT spectral subtraction + per-bin expander) ============
 const workletCode = `
 class SpectralClean extends AudioWorkletProcessor {
-  static get parameterDescriptors(){ return []; }
   constructor(){
     super();
-    this.N = 1024;                       // FFT size
-    this.hop = this.N/4;                  // 75% overlap
+    this.N = 1024; this.hop = this.N/4;
     this.win = new Float32Array(this.N);
-    for(let i=0;i<this.N;i++) this.win[i] = 0.5-0.5*Math.cos(2*Math.PI*i/this.N); // Hann
-    this.inBuf = new Float32Array(this.N);
-    this.inPos = 0;
-    this.outBuf = new Float32Array(this.N*2);
-    this.outPos = 0;
-    this.re = new Float32Array(this.N);
-    this.im = new Float32Array(this.N);
-    this.noiseMag = new Float32Array(this.N/2+1); // learned noise floor
+    for(let i=0;i<this.N;i++) this.win[i] = 0.5-0.5*Math.cos(2*Math.PI*i/this.N);
+    this.inBuf = new Float32Array(this.N); this.inPos = 0;
+    this.outBuf = new Float32Array(this.N*2); this.outPos = 0; this.readPos = 0;
+    this.re = new Float32Array(this.N); this.im = new Float32Array(this.N);
+    this.noiseMag = new Float32Array(this.N/2+1);
     this.prevGain = new Float32Array(this.N/2+1).fill(1);
-    this.learned = false;
-    this.learning = false;
-    this.learnCount = 0;
-    this.learnFrames = 0;
-    // controls
-    this.suppressDb = 14; this.reverbAmt = 0.4; this.makeup = 1.0; this.bypass = false;
-    this.reduceAccum = 0; this.reduceFrames = 0;
-    this.port.onmessage = (e)=>{
-      const d = e.data;
-      if(d.type==='ctl'){
-        this.suppressDb = d.suppressDb; this.reverbAmt = d.reverbAmt;
-        this.makeup = d.makeup; this.bypass = d.bypass;
-      } else if(d.type==='learn'){
-        this.learning = true; this.learnCount = 0; this.learnFrames = 0;
-        this.noiseMag.fill(0);
-      }
+    this.learned=false; this.learning=false; this.learnCount=0;
+    this.suppressDb=14; this.reverbAmt=0.4; this.makeup=1.0; this.bypass=false;
+    this.reduceAccum=0; this.reduceFrames=0;
+    this.port.onmessage=(e)=>{
+      const d=e.data;
+      if(d.type==='ctl'){ this.suppressDb=d.suppressDb; this.reverbAmt=d.reverbAmt; this.makeup=d.makeup; this.bypass=d.bypass; }
+      else if(d.type==='learn'){ this.learning=true; this.learnCount=0; this.noiseMag.fill(0); }
     };
-    // bit-reversal + trig tables
     this._buildFFT();
   }
   _buildFFT(){
     const N=this.N; this.rev=new Uint32Array(N);
-    for(let i=0;i<N;i++){ let x=i,r=0; for(let j=0;j<Math.log2(N);j++){ r=(r<<1)|(x&1); x>>=1;} this.rev[i]=r; }
+    const bits=Math.log2(N);
+    for(let i=0;i<N;i++){ let x=i,r=0; for(let j=0;j<bits;j++){ r=(r<<1)|(x&1); x>>=1;} this.rev[i]=r; }
     this.cos=new Float32Array(N/2); this.sin=new Float32Array(N/2);
     for(let i=0;i<N/2;i++){ this.cos[i]=Math.cos(-2*Math.PI*i/N); this.sin[i]=Math.sin(-2*Math.PI*i/N); }
   }
@@ -190,7 +211,7 @@ class SpectralClean extends AudioWorkletProcessor {
       for(let i=0;i<N;i+=len){
         for(let k=0,idx=0;k<half;k++,idx+=step){
           let c=this.cos[idx], s=this.sin[idx]; if(inv) s=-s;
-          const a=i+k, b=i+k+half;
+          const a=i+k,b=i+k+half;
           const tr=re[b]*c-im[b]*s, ti=re[b]*s+im[b]*c;
           re[b]=re[a]-tr; im[b]=im[a]-ti; re[a]+=tr; im[a]+=ti;
         }
@@ -202,32 +223,27 @@ class SpectralClean extends AudioWorkletProcessor {
     const N=this.N, H=N/2;
     for(let i=0;i<N;i++){ this.re[i]=this.inBuf[i]*this.win[i]; this.im[i]=0; }
     this._fft(this.re,this.im,false);
-    const suppLin = Math.pow(10, this.suppressDb/20);
+    const suppLin=Math.pow(10,this.suppressDb/20);
     let reduceSum=0, reduceN=0;
     if(this.learning){
-      for(let k=0;k<=H;k++){ this.noiseMag[k]+=Math.hypot(this.re[k],this.im[k]); }
+      for(let k=0;k<=H;k++) this.noiseMag[k]+=Math.hypot(this.re[k],this.im[k]);
       this.learnCount++;
     } else if(this.learned){
       for(let k=0;k<=H;k++){
         const mag=Math.hypot(this.re[k],this.im[k]);
         const floor=this.noiseMag[k]*suppLin;
-        // spectral subtraction gain (Wiener-ish)
-        let g = mag>1e-9 ? Math.max(0, (mag-floor)/mag) : 0;
-        // per-bin downward expander for reverb tails: pull down low-energy bins further
-        const rel = mag/(floor+1e-9);
-        if(rel<1.5){ g *= Math.max(0, 1 - this.reverbAmt*(1 - rel/1.5)); }
-        // smoothing to reduce musical noise
-        g = 0.6*g + 0.4*this.prevGain[k];
-        this.prevGain[k]=g;
-        if(mag>floor*0.5){ reduceSum += (1-g); reduceN++; }
+        let g=mag>1e-9?Math.max(0,(mag-floor)/mag):0;
+        const rel=mag/(floor+1e-9);
+        if(rel<1.5) g*=Math.max(0,1-this.reverbAmt*(1-rel/1.5));
+        g=0.6*g+0.4*this.prevGain[k]; this.prevGain[k]=g;
+        if(mag>floor*0.5){ reduceSum+=(1-g); reduceN++; }
         this.re[k]*=g; this.im[k]*=g;
         if(k>0&&k<H){ this.re[N-k]=this.re[k]; this.im[N-k]=-this.im[k]; }
       }
-      this.re[H]*=this.prevGain[H]; this.im[H]*=this.prevGain[H];
     }
-    if(reduceN>0){ this.reduceAccum += reduceSum/reduceN; this.reduceFrames++; }
+    if(reduceN>0){ this.reduceAccum+=reduceSum/reduceN; this.reduceFrames++; }
     this._fft(this.re,this.im,true);
-    for(let i=0;i<N;i++){ this.outBuf[(this.outPos+i)%(N*2)] += this.re[i]*this.win[i]*this.makeup; }
+    for(let i=0;i<N;i++) this.outBuf[(this.outPos+i)%(N*2)] += this.re[i]*this.win[i]*this.makeup;
   }
   process(inputs,outputs){
     const inp=inputs[0], out=outputs[0];
@@ -235,13 +251,10 @@ class SpectralClean extends AudioWorkletProcessor {
     const x=inp[0], y=out[0], n=x.length;
     if(this.bypass){ y.set(x); return true; }
     for(let s=0;s<n;s++){
-      this.inBuf[this.inPos]=x[s]; this.inPos++;
-      // emit
-      y[s]=this.outBuf[this.readPos||0];
-      this.outBuf[this.readPos||0]=0;
-      this.readPos=((this.readPos||0)+1)%(this.N*2);
+      this.inBuf[this.inPos++]=x[s];
+      y[s]=this.outBuf[this.readPos]; this.outBuf[this.readPos]=0;
+      this.readPos=(this.readPos+1)%(this.N*2);
       if(this.inPos>=this.N){
-        // shift by hop
         this._frame();
         this.outPos=(this.outPos+this.hop)%(this.N*2);
         this.inBuf.copyWithin(0,this.hop);
@@ -266,116 +279,193 @@ class SpectralClean extends AudioWorkletProcessor {
 registerProcessor('spectral-clean', SpectralClean);
 `;
 
+// ============ Presets ============
+const PRESETS = {
+  'Coffee Shop':   {suppress:16, reverb:35, hp:90,  gain:3},
+  'Echoey Room':   {suppress:12, reverb:75, hp:100, gain:2},
+  'AC / Fan':      {suppress:22, reverb:25, hp:120, gain:2},
+  'Gaming Headset':{suppress:18, reverb:30, hp:85,  gain:4},
+  'Podcast':       {suppress:10, reverb:20, hp:75,  gain:2},
+  'Gentle':        {suppress:7,  reverb:15, hp:60,  gain:1},
+};
+
 // ============ Main thread ============
 let ctx, stream, node, srcNode, hpFilter, analyserIn, analyserOut, monitorGain;
-let monitor='clean';
+let recDest, mediaRec, recChunks=[], recTimer, recStart;
+let monitor='clean', heldRaw=false;
+let silenceMs=0, lastLearnT=0;
 const $ = id=>document.getElementById(id);
 
+const pc=$('presets');
+Object.keys(PRESETS).forEach(name=>{
+  const b=document.createElement('button');
+  b.className='preset'; b.textContent=name; b.dataset.name=name;
+  b.onclick=()=>applyPreset(name);
+  pc.appendChild(b);
+});
+function applyPreset(name){
+  const p=PRESETS[name];
+  $('suppress').value=p.suppress; $('reverb').value=p.reverb; $('hp').value=p.hp; $('gain').value=p.gain;
+  syncLabels(); pushCtl();
+  [...pc.children].forEach(c=>c.classList.toggle('active',c.dataset.name===name));
+}
+
 async function start(){
-  ctx = new (window.AudioContext||window.webkitAudioContext)({latencyHint:'interactive'});
-  const blob = new Blob([workletCode],{type:'application/javascript'});
+  ctx=new (window.AudioContext||window.webkitAudioContext)({latencyHint:'interactive'});
+  const blob=new Blob([workletCode],{type:'application/javascript'});
   await ctx.audioWorklet.addModule(URL.createObjectURL(blob));
-  stream = await navigator.mediaDevices.getUserMedia({audio:{
-    echoCancellation:false, noiseSuppression:false, autoGainControl:false
-  }});
-  srcNode = ctx.createMediaStreamSource(stream);
-  hpFilter = ctx.createBiquadFilter(); hpFilter.type='highpass';
-  hpFilter.frequency.value = +$('hp').value;
-  node = new AudioWorkletNode(ctx,'spectral-clean',{numberOfInputs:1,numberOfOutputs:1});
-  analyserIn = ctx.createAnalyser(); analyserIn.fftSize=2048;
-  analyserOut = ctx.createAnalyser(); analyserOut.fftSize=2048;
-  monitorGain = ctx.createGain(); monitorGain.gain.value=1;
+  stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
+  srcNode=ctx.createMediaStreamSource(stream);
+  hpFilter=ctx.createBiquadFilter(); hpFilter.type='highpass'; hpFilter.frequency.value=+$('hp').value;
+  node=new AudioWorkletNode(ctx,'spectral-clean',{numberOfInputs:1,numberOfOutputs:1});
+  analyserIn=ctx.createAnalyser(); analyserIn.fftSize=2048;
+  analyserOut=ctx.createAnalyser(); analyserOut.fftSize=2048;
+  monitorGain=ctx.createGain(); monitorGain.gain.value=1;
+  recDest=ctx.createMediaStreamDestination();
 
   srcNode.connect(analyserIn);
   srcNode.connect(hpFilter);
   hpFilter.connect(node);
   node.connect(analyserOut);
   node.connect(monitorGain);
+  node.connect(recDest);        // recording always taps the CLEANED signal
   monitorGain.connect(ctx.destination);
 
-  node.port.onmessage = (e)=>{
+  node.port.onmessage=(e)=>{
     const d=e.data;
-    if(d.type==='learned'){ $('statProfile').textContent='learned ✓'; $('hint').innerHTML='Noise profile captured. Now talk normally — toggle <b>Bypass</b> to A/B the difference.'; }
-    if(d.type==='reduce'){ $('statReduce').textContent = d.db.toFixed(1)+' dB'; }
+    if(d.type==='learned'){ $('statProfile').textContent='learned ✓'; $('hint').innerHTML='Room learned. Talk normally — hold <span class="kbd">Space</span> to A/B against the raw mic.'; }
+    if(d.type==='reduce'){ $('heroDb').textContent=d.db.toFixed(1); }
   };
   pushCtl();
-  $('startBtn').disabled=true; $('stopBtn').disabled=false; $('learnBtn').disabled=false;
+  $('startBtn').disabled=true; $('stopBtn').disabled=false; $('learnBtn').disabled=false; $('recBtn').disabled=false;
   $('liveDot').className='dot live'; $('liveTxt').textContent='live';
-  const sr=ctx.sampleRate; $('statLat').textContent='~'+Math.round(1024/sr*1000)+' ms';
+  $('statLat').textContent='~'+Math.round(1024/ctx.sampleRate*1000)+' ms';
   draw();
 }
 
 function stop(){
+  if(mediaRec && mediaRec.state==='recording') stopRec();
   if(stream) stream.getTracks().forEach(t=>t.stop());
-  if(ctx) ctx.close();
-  ctx=null;
-  $('startBtn').disabled=false; $('stopBtn').disabled=true; $('learnBtn').disabled=true;
+  if(ctx) ctx.close(); ctx=null;
+  $('startBtn').disabled=false; $('stopBtn').disabled=true; $('learnBtn').disabled=true; $('recBtn').disabled=true;
   $('liveDot').className='dot'; $('liveTxt').textContent='idle';
-  $('statProfile').textContent='not learned'; $('statReduce').textContent='0.0 dB';
+  $('statProfile').textContent='not learned'; $('heroDb').textContent='0.0';
 }
 
 function pushCtl(){
   if(!node) return;
   node.port.postMessage({type:'ctl',
-    suppressDb:+$('suppress').value,
-    reverbAmt:+$('reverb').value/100,
+    suppressDb:+$('suppress').value, reverbAmt:+$('reverb').value/100,
     makeup:Math.pow(10,(+$('gain').value)/20),
-    bypass: monitor==='raw'
-  });
+    bypass: (monitor==='raw'||heldRaw)});
   if(hpFilter) hpFilter.frequency.value=+$('hp').value;
 }
+function doLearn(){ node.port.postMessage({type:'learn'}); $('statProfile').textContent='learning…'; }
 
 function setMonitor(m){
   monitor=m;
   $('btnClean').classList.toggle('active',m==='clean');
   $('btnRaw').classList.toggle('active',m==='raw');
   $('btnMute').classList.toggle('active',m==='mute');
-  if(monitorGain) monitorGain.gain.value = m==='mute'?0:1;
+  if(monitorGain) monitorGain.gain.value=m==='mute'?0:1;
   pushCtl();
 }
 
-// visualizers
+// ===== Recording -> WAV =====
+function startRec(){
+  recChunks=[];
+  mediaRec=new MediaRecorder(recDest.stream);
+  mediaRec.ondataavailable=e=>{ if(e.data.size) recChunks.push(e.data); };
+  mediaRec.onstop=encodeAndDownload;
+  mediaRec.start();
+  recStart=Date.now();
+  $('recBtn').classList.add('recording'); $('recTxt').textContent='Stop';
+  $('recTime').style.display='inline-flex';
+  recTimer=setInterval(()=>{
+    const s=Math.floor((Date.now()-recStart)/1000);
+    $('recTime').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+  },500);
+}
+function stopRec(){ clearInterval(recTimer); if(mediaRec&&mediaRec.state==='recording') mediaRec.stop();
+  $('recBtn').classList.remove('recording'); $('recTxt').textContent='Record'; }
+
+async function encodeAndDownload(){
+  const blob=new Blob(recChunks,{type:recChunks[0]?.type||'audio/webm'});
+  const arr=await blob.arrayBuffer();
+  const tmp=new (window.AudioContext||window.webkitAudioContext)();
+  const audio=await tmp.decodeAudioData(arr);
+  const wav=encodeWAV(audio);
+  tmp.close();
+  const url=URL.createObjectURL(new Blob([wav],{type:'audio/wav'}));
+  const a=document.createElement('a');
+  a.href=url; a.download='acoustic-clean-'+Date.now()+'.wav'; a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function encodeWAV(buf){
+  const numCh=buf.numberOfChannels, sr=buf.sampleRate, len=buf.length;
+  const data=new Float32Array(len*numCh);
+  for(let c=0;c<numCh;c++){ const ch=buf.getChannelData(c); for(let i=0;i<len;i++) data[i*numCh+c]=ch[i]; }
+  const ab=new ArrayBuffer(44+data.length*2), v=new DataView(ab);
+  const wr=(o,s)=>{ for(let i=0;i<s.length;i++) v.setUint8(o+i,s.charCodeAt(i)); };
+  wr(0,'RIFF'); v.setUint32(4,36+data.length*2,true); wr(8,'WAVE'); wr(12,'fmt ');
+  v.setUint32(16,16,true); v.setUint16(20,1,true); v.setUint16(22,numCh,true);
+  v.setUint32(24,sr,true); v.setUint32(28,sr*numCh*2,true); v.setUint16(32,numCh*2,true);
+  v.setUint16(34,16,true); wr(36,'data'); v.setUint32(40,data.length*2,true);
+  let o=44; for(let i=0;i<data.length;i++){ let s=Math.max(-1,Math.min(1,data[i])); v.setInt16(o,s<0?s*0x8000:s*0x7FFF,true); o+=2; }
+  return ab;
+}
+
+// ===== visualizers + auto-learn silence detection =====
 function draw(){
   if(!ctx) return;
   requestAnimationFrame(draw);
-  spectrum($('vizIn'), analyserIn, '#4ea1ff');
-  spectrum($('vizOut'), analyserOut, '#3ddc97');
+  const rms=spectrum($('vizIn'),analyserIn,'#4ea1ff',true);
+  spectrum($('vizOut'),analyserOut,'#3ddc97',false);
+  if($('autoLearn').checked && node){
+    if(rms<0.012){ silenceMs+=16; } else { silenceMs=0; }
+    const now=performance.now();
+    if(silenceMs>1200 && now-lastLearnT>8000){ doLearn(); lastLearnT=now; silenceMs=0; }
+  }
 }
-function spectrum(cv, an, color){
-  if(!an) return;
-  const dpr=window.devicePixelRatio||1;
-  const w=cv.clientWidth, h=cv.clientHeight;
+function spectrum(cv,an,color,returnRms){
+  if(!an) return 0;
+  const dpr=window.devicePixelRatio||1, w=cv.clientWidth, h=cv.clientHeight;
   if(cv.width!==w*dpr){ cv.width=w*dpr; cv.height=h*dpr; }
-  const g=cv.getContext('2d'); g.setTransform(dpr,0,0,dpr,0,0);
-  g.clearRect(0,0,w,h);
-  const N=an.frequencyBinCount, data=new Uint8Array(N);
-  an.getByteFrequencyData(data);
-  const bars=96, step=Math.floor(N*0.6/bars);
-  g.fillStyle=color;
+  const g=cv.getContext('2d'); g.setTransform(dpr,0,0,dpr,0,0); g.clearRect(0,0,w,h);
+  const N=an.frequencyBinCount, data=new Uint8Array(N); an.getByteFrequencyData(data);
+  const bars=96, step=Math.floor(N*0.6/bars); g.fillStyle=color;
   for(let i=0;i<bars;i++){
-    let v=0; for(let j=0;j<step;j++) v=Math.max(v,data[i*step+j]);
-    const bh=(v/255)*(h-8);
-    const x=i*(w/bars);
-    g.globalAlpha=0.35+0.65*(v/255);
-    g.fillRect(x+1,h-bh,(w/bars)-2,bh);
+    let vv=0; for(let j=0;j<step;j++) vv=Math.max(vv,data[i*step+j]);
+    const bh=(vv/255)*(h-8), x=i*(w/bars);
+    g.globalAlpha=0.35+0.65*(vv/255); g.fillRect(x+1,h-bh,(w/bars)-2,bh);
   }
   g.globalAlpha=1;
+  if(returnRms){ const td=new Uint8Array(an.fftSize); an.getByteTimeDomainData(td);
+    let s=0; for(let i=0;i<td.length;i++){ const x=(td[i]-128)/128; s+=x*x; } return Math.sqrt(s/td.length); }
+  return 0;
 }
 
-// wire up
+// ===== labels + wiring =====
+function syncLabels(){
+  $('vSuppress').textContent=$('suppress').value;
+  $('vReverb').textContent=$('reverb').value;
+  $('vHp').textContent=$('hp').value;
+  $('vGain').textContent=($('gain').value>0?'+':'')+$('gain').value;
+}
 $('startBtn').onclick=()=>start().catch(e=>{$('hint').innerHTML='<span style="color:#ff6b6b">Mic error: '+e.message+'</span>';});
 $('stopBtn').onclick=stop;
-$('learnBtn').onclick=()=>{ node.port.postMessage({type:'learn'}); $('statProfile').textContent='learning…'; $('hint').textContent='Stay quiet — sampling room noise…'; };
+$('learnBtn').onclick=()=>{ doLearn(); lastLearnT=performance.now(); };
 $('btnClean').onclick=()=>setMonitor('clean');
 $('btnRaw').onclick=()=>setMonitor('raw');
 $('btnMute').onclick=()=>setMonitor('mute');
+$('recBtn').onclick=()=>{ if(mediaRec&&mediaRec.state==='recording') stopRec(); else startRec(); };
 ['suppress','reverb','hp','gain'].forEach(id=>{
-  $(id).oninput=()=>{
-    $('v'+id.charAt(0).toUpperCase()+id.slice(1)).textContent =
-      id==='reverb'?$(id).value : id==='hp'?$(id).value : id==='gain'?(($(id).value>0?'+':'')+$(id).value):$(id).value;
-    pushCtl();
-  };
+  $(id).oninput=()=>{ syncLabels(); pushCtl(); [...pc.children].forEach(c=>c.classList.remove('active')); };
 });
+// hold-Space to A/B raw
+addEventListener('keydown',e=>{ if(e.code==='Space'&&!heldRaw&&node&&e.target.tagName!=='INPUT'){ e.preventDefault(); heldRaw=true; pushCtl(); $('liveTxt').textContent='RAW'; }});
+addEventListener('keyup',e=>{ if(e.code==='Space'&&heldRaw){ heldRaw=false; pushCtl(); $('liveTxt').textContent='live'; }});
+syncLabels();
 </script>
 </body>
 </html>
