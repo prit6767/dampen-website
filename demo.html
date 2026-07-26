@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deafen Demo — All Six Modes</title>
+  <meta name="description" content="Try the full Deafen demo with six focus experiences: work, open office, students, speech blur, deep work scenes, and instant reset.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">D</span>
+        <span class="brand-copy">
+          <strong>Deafen</strong>
+          <span>Focus that works instantly</span>
+        </span>
+      </a>
+      <nav class="site-nav">
+        <a class="nav-link" href="index.html">Home</a>
+        <a class="nav-link" href="about.html">About</a>
+        <a class="nav-link active" href="demo.html">Demo</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="site-shell" data-demo-app>
+      <section class="hero">
+        <p class="eyebrow">Full product demo</p>
+        <div class="hero-grid">
+          <div class="hero-card">
+            <h1>All six Deafen experiences, in one page.</h1>
+            <p class="lede">This demo turns Deafen from a strategy idea into a working browser experience. Pick a mode, choose a preset, shape the sound, and run a timed session without signing up or installing anything.</p>
+            <div class="cta-row">
+              <button class="button" type="button" data-start-demo>Start this mode</button>
+              <button class="button secondary" type="button" data-stop-demo disabled>Stop</button>
+            </div>
+            <div class="mini-grid">
+              <div class="mini"><span>Privacy</span><strong>Local, no account</strong></div>
+              <div class="mini"><span>Format</span><strong>Website-only</strong></div>
+              <div class="mini"><span>Modes</span><strong>All six included</strong></div>
+            </div>
+          </div>
+
+          <div class="hero-card">
+            <p class="eyebrow">Live state</p>
+            <div class="status-bar">
+              <div class="status-box">
+                <span>Status</span>
+                <strong data-state-text>Idle</strong>
+              </div>
+              <div class="status-box">
+                <span>Best for</span>
+                <strong data-stat-bestfor>Nearby speech</strong>
+              </div>
+              <div class="status-box">
+                <span>Preset</span>
+                <strong data-stat-sound>Balanced</strong>
+              </div>
+              <div class="status-box">
+                <span>Session</span>
+                <strong data-stat-session>50 min</strong>
+              </div>
+            </div>
+            <div class="quote-panel" style="margin-top:18px">
+              <p data-summary>Speech Blur is tuned for nearby speech with the balanced preset.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section demo-layout">
+        <aside class="panel demo-sidebar">
+          <p class="eyebrow">Modes</p>
+          <h3 style="margin:0;font-size:1.65rem;letter-spacing:-0.04em">Choose a Deafen experience</h3>
+          <p class="note" style="margin-top:8px">All six product directions are live here as selectable demo modes.</p>
+          <div class="mode-list">
+            <button class="mode-button" type="button" data-mode-button="work">
+              <strong>Deafen for Work</strong>
+              <span>Homework, coding, writing</span>
+            </button>
+            <button class="mode-button" type="button" data-mode-button="office">
+              <strong>Open Offices</strong>
+              <span>Coworkers, keyboard, traffic</span>
+            </button>
+            <button class="mode-button" type="button" data-mode-button="students">
+              <strong>Students</strong>
+              <span>Reading, studying, exam prep</span>
+            </button>
+            <button class="mode-button active" type="button" data-mode-button="speech">
+              <strong>Speech Blur</strong>
+              <span>Blur nearby conversations</span>
+            </button>
+            <button class="mode-button" type="button" data-mode-button="scenes">
+              <strong>Deep Work Scenes</strong>
+              <span>Immersive environments</span>
+            </button>
+            <button class="mode-button" type="button" data-mode-button="reset">
+              <strong>Instant Reset</strong>
+              <span>Short focus recovery</span>
+            </button>
+          </div>
+        </aside>
+
+        <div class="demo-main">
+          <section class="feature-panel">
+            <div class="feature-hero">
+              <div>
+                <p class="eyebrow">Current mode</p>
+                <h3 data-mode-title>Speech Blur</h3>
+                <p class="tagline" data-mode-subtitle>Make nearby voices feel farther away instead of pretending to cancel every sound.</p>
+                <div class="chip-row" data-mode-tags></div>
+              </div>
+              <div class="box">
+                <h4>Mode summary</h4>
+                <p class="note" data-mode-promise></p>
+                <div class="split">
+                  <div class="box">
+                    <h4>Audience</h4>
+                    <p class="note" data-mode-audience></p>
+                  </div>
+                  <div class="box">
+                    <h4>Hook</h4>
+                    <p class="note" data-mode-hook></p>
+                  </div>
+                </div>
+                <p class="note" style="margin-top:12px" data-mode-why></p>
+              </div>
+            </div>
+
+            <div class="control-grid">
+              <div class="control-card">
+                <h4>Pick a preset</h4>
+                <div class="preset-grid" data-presets></div>
+              </div>
+
+              <div class="control-card">
+                <h4>Set your session</h4>
+                <div class="session-bar" data-session-bar></div>
+                <div class="quote-panel" style="margin-top:14px">
+                  <p>Countdown: <strong data-timer>50:00</strong></p>
+                </div>
+              </div>
+            </div>
+
+            <div class="control-grid">
+              <div class="control-card">
+                <h4>Shape the sound</h4>
+                <div class="range-wrap">
+                  <label>
+                    <span>Intensity</span>
+                    <strong data-intensity-value>62%</strong>
+                  </label>
+                  <input type="range" min="0" max="100" value="62" data-intensity>
+                </div>
+                <div class="range-wrap">
+                  <label>
+                    <span>Warmth</span>
+                    <strong data-warmth-value>55%</strong>
+                  </label>
+                  <input type="range" min="0" max="100" value="55" data-warmth>
+                </div>
+              </div>
+
+              <div class="control-card">
+                <h4>What this mode includes</h4>
+                <ul data-feature-list></ul>
+              </div>
+            </div>
+
+            <div class="status-bar" style="margin-top:18px">
+              <div class="status-box">
+                <span>Best for</span>
+                <strong data-stat-bestfor>Nearby speech</strong>
+              </div>
+              <div class="status-box">
+                <span>Active preset</span>
+                <strong data-stat-sound>Balanced</strong>
+              </div>
+              <div class="status-box">
+                <span>Intensity</span>
+                <strong data-stat-intensity>62%</strong>
+              </div>
+              <div class="status-box">
+                <span>Session length</span>
+                <strong data-stat-session>50 min</strong>
+              </div>
+            </div>
+          </section>
+
+          <section class="feature-panel">
+            <p class="eyebrow">Output visualizer</p>
+            <canvas class="viz" data-visualizer></canvas>
+            <div class="demo-footer">
+              This demo intentionally focuses on believable browser-native focus sound design. It is meant to make environments easier to work in, not to pretend the browser can become hardware noise-cancelling headphones.
+            </div>
+          </section>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-panel">
+      Deafen demo: all six product directions live in one browser page, with no signup and no install.
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

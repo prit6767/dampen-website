@@ -1,564 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Deafen — Six Website Paths That Can Actually Work</title>
-<style>
-  :root{
-    --bg:#f4f1ea;
-    --paper:rgba(255,255,255,0.78);
-    --ink:#162126;
-    --muted:#607076;
-    --line:rgba(22,33,38,0.12);
-    --accent:#0d7567;
-    --accent-soft:#d8efe8;
-    --warm:#f1e5cf;
-    --shadow:0 26px 90px rgba(22,33,38,0.12);
-    --radius:28px;
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0;min-height:100%}
-  body{
-    font:16px/1.55 Georgia, "Times New Roman", serif;
-    color:var(--ink);
-    background:
-      radial-gradient(circle at top left, rgba(216,239,232,0.95), transparent 34%),
-      radial-gradient(circle at 90% 8%, rgba(241,229,207,0.88), transparent 28%),
-      linear-gradient(180deg, #f8f5ef 0%, var(--bg) 100%);
-    padding:24px 16px 44px;
-  }
-  .shell{max-width:1180px;margin:0 auto}
-  .hero{
-    background:var(--paper);
-    border:1px solid var(--line);
-    border-radius:34px;
-    box-shadow:var(--shadow);
-    padding:28px;
-    backdrop-filter:blur(18px);
-  }
-  .brand{
-    display:inline-flex;
-    align-items:center;
-    gap:12px;
-  }
-  .mark{
-    width:52px;
-    height:52px;
-    border-radius:16px;
-    display:grid;
-    place-items:center;
-    background:linear-gradient(135deg, var(--accent), #8bcbb6);
-    color:#fff;
-    font:700 22px/1 Georgia, serif;
-    box-shadow:0 16px 38px rgba(13,117,103,0.22);
-  }
-  .eyebrow{
-    margin:0;
-    color:var(--muted);
-    text-transform:uppercase;
-    letter-spacing:0.12em;
-    font:700 0.72rem/1.2 "Trebuchet MS", sans-serif;
-  }
-  h1{
-    margin:18px 0 10px;
-    font-size:clamp(2.8rem, 6vw, 5.8rem);
-    line-height:0.92;
-    letter-spacing:-0.06em;
-    max-width:10ch;
-  }
-  .lede{
-    max-width:50rem;
-    margin:0;
-    color:var(--muted);
-    font-size:1.08rem;
-  }
-  .hero-grid{
-    display:grid;
-    grid-template-columns:1.2fr 0.8fr;
-    gap:18px;
-    margin-top:24px;
-  }
-  .panel{
-    background:rgba(255,255,255,0.72);
-    border:1px solid var(--line);
-    border-radius:var(--radius);
-    padding:20px;
-  }
-  .stat-grid{
-    display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:12px;
-  }
-  .stat{
-    padding:14px;
-    border-radius:18px;
-    border:1px solid var(--line);
-    background:rgba(255,255,255,0.78);
-  }
-  .stat b{
-    display:block;
-    margin-top:3px;
-    font-size:1.3rem;
-  }
-  .cta-row{
-    display:flex;
-    gap:12px;
-    flex-wrap:wrap;
-    margin-top:18px;
-  }
-  .pill{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    padding:10px 14px;
-    border-radius:999px;
-    background:var(--accent-soft);
-    color:#0d4e45;
-    border:1px solid rgba(13,117,103,0.12);
-    font:600 0.92rem/1 "Trebuchet MS", sans-serif;
-  }
-  .button{
-    appearance:none;
-    border:none;
-    border-radius:999px;
-    padding:13px 18px;
-    background:var(--ink);
-    color:#f7f4ee;
-    cursor:pointer;
-    font:600 0.98rem/1 "Trebuchet MS", sans-serif;
-    transition:transform .15s ease, opacity .15s ease;
-  }
-  .button:hover{transform:translateY(-1px)}
-  .button.secondary{
-    background:transparent;
-    color:var(--ink);
-    border:1px solid var(--line);
-  }
-  .section-head{
-    margin:28px 0 14px;
-    display:flex;
-    align-items:end;
-    justify-content:space-between;
-    gap:12px;
-    flex-wrap:wrap;
-  }
-  .section-head h2{
-    margin:0;
-    font-size:2rem;
-    letter-spacing:-0.04em;
-  }
-  .section-head p{
-    margin:0;
-    color:var(--muted);
-    max-width:36rem;
-  }
-  .grid{
-    display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:18px;
-  }
-  .card{
-    background:var(--paper);
-    border:1px solid var(--line);
-    border-radius:30px;
-    box-shadow:var(--shadow);
-    overflow:hidden;
-  }
-  .card-top{
-    padding:22px 22px 14px;
-    border-bottom:1px solid var(--line);
-    background:
-      linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.52)),
-      radial-gradient(circle at top right, rgba(216,239,232,0.9), transparent 36%);
-  }
-  .kicker{
-    margin:0 0 10px;
-    color:var(--muted);
-    font:700 0.72rem/1.2 "Trebuchet MS", sans-serif;
-    letter-spacing:0.12em;
-    text-transform:uppercase;
-  }
-  .card h3{
-    margin:0;
-    font-size:2rem;
-    letter-spacing:-0.05em;
-  }
-  .tagline{
-    margin:8px 0 0;
-    color:var(--muted);
-    max-width:33rem;
-  }
-  .card-body{
-    padding:20px 22px 22px;
-    display:grid;
-    gap:18px;
-  }
-  .columns{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:16px;
-  }
-  .box{
-    padding:16px;
-    border-radius:20px;
-    border:1px solid var(--line);
-    background:rgba(255,255,255,0.72);
-  }
-  .box h4{
-    margin:0 0 8px;
-    font:700 0.95rem/1.3 "Trebuchet MS", sans-serif;
-  }
-  ul{
-    margin:0;
-    padding-left:18px;
-    color:var(--muted);
-  }
-  .mini-grid{
-    display:grid;
-    grid-template-columns:repeat(3,minmax(0,1fr));
-    gap:12px;
-  }
-  .mini{
-    padding:14px;
-    border-radius:18px;
-    background:rgba(216,239,232,0.46);
-    border:1px solid rgba(13,117,103,0.12);
-  }
-  .mini span{
-    display:block;
-    color:var(--muted);
-    font:700 0.72rem/1.2 "Trebuchet MS", sans-serif;
-    letter-spacing:0.12em;
-    text-transform:uppercase;
-  }
-  .mini strong{
-    display:block;
-    margin-top:6px;
-    font-size:1.06rem;
-  }
-  .note{
-    color:var(--muted);
-    margin:0;
-  }
-  .footer{
-    margin-top:20px;
-    padding:18px 20px;
-    border-radius:22px;
-    border:1px solid var(--line);
-    background:rgba(255,255,255,0.65);
-    color:var(--muted);
-  }
-  @media (max-width:900px){
-    .hero-grid,.grid,.columns,.mini-grid{grid-template-columns:1fr}
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deafen — Focus That Works Instantly</title>
+  <meta name="description" content="Deafen is a no-signup website for sharper focus. Block distractions, blur nearby speech, and drop into work faster with instant sound environments.">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="shell">
-  <section class="hero">
-    <div class="brand">
-      <div class="mark">D</div>
-      <div>
-        <p class="eyebrow">Deafen</p>
-        <p style="margin:2px 0 0;color:var(--muted)">Six website-native product directions that can actually ship</p>
-      </div>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark">D</span>
+        <span class="brand-copy">
+          <strong>Deafen</strong>
+          <span>Focus that works instantly</span>
+        </span>
+      </a>
+      <nav class="site-nav">
+        <a class="nav-link active" href="index.html">Home</a>
+        <a class="nav-link" href="about.html">About</a>
+        <a class="nav-link" href="demo.html">Demo</a>
+      </nav>
     </div>
+  </header>
 
-    <h1>Stop faking ANC. Start owning focus.</h1>
-    <p class="lede">Deafen should become an instant, no-signup web product that delivers value in under ten seconds. The opportunity is not “perfect noise-cancelling headphones in the browser.” It is building sharper focus tools that feel immediate, private, and linkable.</p>
+  <main class="page">
+    <div class="site-shell">
+      <section class="hero">
+        <p class="eyebrow">Website-first focus</p>
+        <div class="hero-grid">
+          <div class="hero-card">
+            <h1>Deafen makes hard environments easier to think in.</h1>
+            <p class="lede">No signup. No app. No gimmicks about perfect noise cancellation. Deafen gives people instant focus experiences that work directly in the browser, whether they are doing homework, coding, reading, or trying to block out an open room.</p>
+            <div class="cta-row">
+              <a class="button" href="demo.html">Try the demo</a>
+              <a class="button secondary" href="about.html">Meet the founders</a>
+            </div>
+            <div class="mini-grid">
+              <div class="mini">
+                <span>Instant</span>
+                <strong>Start in under ten seconds</strong>
+              </div>
+              <div class="mini">
+                <span>Private</span>
+                <strong>No account required</strong>
+              </div>
+              <div class="mini">
+                <span>Repeatable</span>
+                <strong>Built for daily sessions</strong>
+              </div>
+            </div>
+          </div>
+          <div class="hero-card">
+            <p class="eyebrow">What makes it different</p>
+            <div class="stat-grid">
+              <div class="stat">
+                <span>Main idea</span>
+                <strong>Focus utility, not fake ANC</strong>
+              </div>
+              <div class="stat">
+                <span>Best wedge</span>
+                <strong>Speech blur and distraction control</strong>
+              </div>
+              <div class="stat">
+                <span>Built for</span>
+                <strong>Students, workers, everyday users</strong>
+              </div>
+              <div class="stat">
+                <span>Growth path</span>
+                <strong>SEO, sharing, and repeat use</strong>
+              </div>
+            </div>
+            <div class="quote-panel" style="margin-top:18px">
+              <p>Deafen should feel like the fastest way to build a better working environment, even when the actual room around you is messy, loud, or distracting.</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-    <div class="hero-grid">
-      <div class="panel">
-        <p class="eyebrow">Why This Pivot Wins</p>
-        <div class="stat-grid">
-          <div class="stat">Works on web<b>No app</b></div>
-          <div class="stat">Starts instantly<b>No signup</b></div>
-          <div class="stat">Habit potential<b>Daily sessions</b></div>
-          <div class="stat">Growth path<b>SEO + sharing</b></div>
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Six experiences</p>
+            <h2>Everything Deafen Can Become</h2>
+          </div>
+          <p>The strongest version of Deafen is not one single ambient sound page. It is a family of focus tools, each with a clear use case and a believable reason to come back tomorrow.</p>
         </div>
-        <div class="cta-row">
-          <span class="pill">Fast utility, not science project</span>
-          <span class="pill">Private by default</span>
-          <span class="pill">Built for repeat use</span>
+
+        <div class="grid-2">
+          <article class="card">
+            <div class="card-top">
+              <p class="kicker">1. Work Focus</p>
+              <h3>Deafen for Work</h3>
+              <p class="tagline">A one-click focus shield for work blocks, homework, writing, and coding.</p>
+            </div>
+            <div class="card-body">
+              <div class="mini-grid">
+                <div class="mini"><span>Promise</span><strong>Get into work mode fast</strong></div>
+                <div class="mini"><span>Best for</span><strong>Daily deep work</strong></div>
+                <div class="mini"><span>Why it matters</span><strong>Habit-friendly</strong></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-top">
+              <p class="kicker">2. Open Office</p>
+              <h3>Deafen for Open Offices</h3>
+              <p class="tagline">Pick the exact noise bothering you and let Deafen build the right sound shield.</p>
+            </div>
+            <div class="card-body">
+              <div class="mini-grid">
+                <div class="mini"><span>Promise</span><strong>Block the exact annoyance</strong></div>
+                <div class="mini"><span>Best for</span><strong>Office chatter</strong></div>
+                <div class="mini"><span>Why it matters</span><strong>Clear positioning</strong></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-top">
+              <p class="kicker">3. Study</p>
+              <h3>Deafen for Students</h3>
+              <p class="tagline">A study tab built for homework sprints, exam prep, reading, and library-like sessions.</p>
+            </div>
+            <div class="card-body">
+              <div class="mini-grid">
+                <div class="mini"><span>Promise</span><strong>Study without drift</strong></div>
+                <div class="mini"><span>Best for</span><strong>High-frequency use</strong></div>
+                <div class="mini"><span>Why it matters</span><strong>Huge audience</strong></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-top">
+              <p class="kicker">4. Speech Blur</p>
+              <h3>Speech Blur</h3>
+              <p class="tagline">Instead of pretending to cancel every sound, specifically reduce how distracting nearby voices feel.</p>
+            </div>
+            <div class="card-body">
+              <div class="mini-grid">
+                <div class="mini"><span>Promise</span><strong>Make voices feel farther away</strong></div>
+                <div class="mini"><span>Best for</span><strong>Shared spaces</strong></div>
+                <div class="mini"><span>Why it matters</span><strong>Strongest wedge</strong></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-top">
+              <p class="kicker">5. Scenes</p>
+              <h3>Deep Work Scenes</h3>
+              <p class="tagline">Immersive environments like coding bunker, rain library, and night flight.</p>
+            </div>
+            <div class="card-body">
+              <div class="mini-grid">
+                <div class="mini"><span>Promise</span><strong>Enter a whole environment</strong></div>
+                <div class="mini"><span>Best for</span><strong>Long sessions</strong></div>
+                <div class="mini"><span>Why it matters</span><strong>Shareable brand</strong></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="card-top">
+              <p class="kicker">6. Quick Utility</p>
+              <h3>Instant Reset</h3>
+              <p class="tagline">Short, calming resets for people who need focus support without opening a whole workspace.</p>
+            </div>
+            <div class="card-body">
+              <div class="mini-grid">
+                <div class="mini"><span>Promise</span><strong>Reset in minutes</strong></div>
+                <div class="mini"><span>Best for</span><strong>Fast recovery</strong></div>
+                <div class="mini"><span>Why it matters</span><strong>Easy daily habit</strong></div>
+              </div>
+            </div>
+          </article>
         </div>
-      </div>
-      <div class="panel">
-        <p class="eyebrow">What Deafen Needs</p>
-        <p class="note">To support a strong valuation story later, the product needs retention, repeat weekly usage, direct traffic, and a believable premium path. Engagement helps, but only if users keep coming back because the product reliably solves a real daily problem.</p>
-        <div class="cta-row">
-          <button class="button" type="button" onclick="document.getElementById('paths').scrollIntoView({behavior:'smooth'})">See All 6 Paths</button>
-          <button class="button secondary" type="button" onclick="document.getElementById('recommended').scrollIntoView({behavior:'smooth'})">Jump to Recommendation</button>
+      </section>
+
+      <section class="section">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">The story</p>
+            <h2>Why People Will Keep Coming Back</h2>
+          </div>
+          <p>Deafen is built around repeat usefulness. The page has to solve a real problem fast enough that people reopen it tomorrow without needing a reminder or an onboarding flow.</p>
         </div>
-      </div>
+
+        <div class="grid-3">
+          <div class="panel">
+            <p class="eyebrow">For students</p>
+            <p class="note">Homework, reading, and exam prep become easier when there is a reliable tab that helps reduce drift without asking for setup.</p>
+          </div>
+          <div class="panel">
+            <p class="eyebrow">For workers</p>
+            <p class="note">Open offices, shared rooms, and home distractions all create the same problem: broken attention. Deafen gives a faster recovery path.</p>
+          </div>
+          <div class="panel">
+            <p class="eyebrow">For growth</p>
+            <p class="note">The best version of Deafen spreads because it is easy to send, easy to explain, and useful in the first ten seconds for almost anyone.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="hero-card">
+          <div class="section-head" style="margin-bottom:0">
+            <div>
+              <p class="eyebrow">Start here</p>
+              <h2>Try The Full Demo</h2>
+            </div>
+            <p>The demo page includes all six Deafen modes with working in-browser audio interactions, presets, and session controls.</p>
+          </div>
+          <div class="cta-row">
+            <a class="button" href="demo.html">Open demo page</a>
+            <a class="button secondary" href="about.html">Read the founder story</a>
+          </div>
+        </div>
+      </section>
     </div>
-  </section>
+  </main>
 
-  <div class="section-head" id="paths">
-    <div>
-      <p class="eyebrow">Product Directions</p>
-      <h2>Six Paths For Deafen</h2>
+  <footer class="site-footer">
+    <div class="site-footer-panel">
+      Deafen is a privacy-first focus product for the web: instant, linkable, and built to help people do better work in imperfect environments.
     </div>
-    <p>Every path below is designed to work directly on the website, require no signup, and feel useful fast enough to drive daily sessions.</p>
-  </div>
-
-  <section class="grid">
-    <article class="card">
-      <div class="card-top">
-        <p class="kicker">1. Work Focus</p>
-        <h3>Deafen for Work</h3>
-        <p class="tagline">A one-click focus shield for people doing homework, coding, writing, meetings, and solo work.</p>
-      </div>
-      <div class="card-body">
-        <div class="mini-grid">
-          <div class="mini"><span>Main promise</span><strong>Get into work mode fast</strong></div>
-          <div class="mini"><span>Audience</span><strong>Knowledge workers</strong></div>
-          <div class="mini"><span>Hook</span><strong>One click to lock in</strong></div>
-        </div>
-        <div class="columns">
-          <div class="box">
-            <h4>MVP Features</h4>
-            <ul>
-              <li>One big start button</li>
-              <li>25, 50, and 90 minute work modes</li>
-              <li>Brown noise, office hush, and rain presets</li>
-              <li>Auto-fade in and fade out</li>
-            </ul>
-          </div>
-          <div class="box">
-            <h4>Why It Can Win</h4>
-            <ul>
-              <li>Directly useful in under ten seconds</li>
-              <li>Broad audience with daily repeat potential</li>
-              <li>Easy SEO around focus, work, and study queries</li>
-              <li>Natural premium path through extra scenes and modes</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </article>
-
-    <article class="card">
-      <div class="card-top">
-        <p class="kicker">2. Office Noise</p>
-        <h3>Deafen for Open Offices</h3>
-        <p class="tagline">An outcome-first page that asks what is bothering you, then instantly builds the right sound shield.</p>
-      </div>
-      <div class="card-body">
-        <div class="mini-grid">
-          <div class="mini"><span>Main promise</span><strong>Block the exact annoyance</strong></div>
-          <div class="mini"><span>Audience</span><strong>Office workers</strong></div>
-          <div class="mini"><span>Hook</span><strong>Tell us the noise</strong></div>
-        </div>
-        <div class="columns">
-          <div class="box">
-            <h4>MVP Features</h4>
-            <ul>
-              <li>Buttons for coworkers, keyboard, AC, traffic, and cafe noise</li>
-              <li>Automatic matching sound profile</li>
-              <li>Simple intensity slider</li>
-              <li>Focus timer attached to the chosen mode</li>
-            </ul>
-          </div>
-          <div class="box">
-            <h4>Why It Can Win</h4>
-            <ul>
-              <li>Very clear positioning for landing pages</li>
-              <li>Feels customized without asking users to think hard</li>
-              <li>Better conversion than a generic sound mixer</li>
-              <li>Easy workplace-sharing story</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </article>
-
-    <article class="card">
-      <div class="card-top">
-        <p class="kicker">3. Student Focus</p>
-        <h3>Deafen for Students</h3>
-        <p class="tagline">A study-first tab that feels built for homework, exam prep, reading, and long library-style sessions.</p>
-      </div>
-      <div class="card-body">
-        <div class="mini-grid">
-          <div class="mini"><span>Main promise</span><strong>Study without drift</strong></div>
-          <div class="mini"><span>Audience</span><strong>Students</strong></div>
-          <div class="mini"><span>Hook</span><strong>Exam mode in one click</strong></div>
-        </div>
-        <div class="columns">
-          <div class="box">
-            <h4>MVP Features</h4>
-            <ul>
-              <li>Homework sprint, reading mode, exam cram presets</li>
-              <li>Gentle timers for deep study blocks</li>
-              <li>ADHD-friendly steady sound profiles</li>
-              <li>Local-only session streaks with no account</li>
-            </ul>
-          </div>
-          <div class="box">
-            <h4>Why It Can Win</h4>
-            <ul>
-              <li>Massive audience with high daily frequency</li>
-              <li>Shareable through TikTok, Reddit, and YouTube</li>
-              <li>Strong back-to-school and finals season spikes</li>
-              <li>Natural fit for creators showing study setups</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </article>
-
-    <article class="card">
-      <div class="card-top">
-        <p class="kicker">4. Speech Blur</p>
-        <h3>Speech Blur</h3>
-        <p class="tagline">Instead of pretending to cancel all sound, specifically reduce how distracting nearby voices feel.</p>
-      </div>
-      <div class="card-body">
-        <div class="mini-grid">
-          <div class="mini"><span>Main promise</span><strong>Make voices feel farther away</strong></div>
-          <div class="mini"><span>Audience</span><strong>Anyone near people</strong></div>
-          <div class="mini"><span>Hook</span><strong>Soft, balanced, cocoon</strong></div>
-        </div>
-        <div class="columns">
-          <div class="box">
-            <h4>MVP Features</h4>
-            <ul>
-              <li>Speech-shaped masking presets</li>
-              <li>Soft, balanced, and cocoon modes</li>
-              <li>Headphone-first interface</li>
-              <li>Short explanation of how and when it works</li>
-            </ul>
-          </div>
-          <div class="box">
-            <h4>Why It Can Win</h4>
-            <ul>
-              <li>Much more believable than fake ANC</li>
-              <li>Targets one of the most distracting real-world problems</li>
-              <li>Differentiated from generic rain and lo-fi sites</li>
-              <li>Strong potential brand wedge for Deafen</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </article>
-
-    <article class="card">
-      <div class="card-top">
-        <p class="kicker">5. Atmosphere</p>
-        <h3>Deep Work Scenes</h3>
-        <p class="tagline">A premium-feeling web experience built around scenes, moods, and immersive focus environments.</p>
-      </div>
-      <div class="card-body">
-        <div class="mini-grid">
-          <div class="mini"><span>Main promise</span><strong>Enter a whole environment</strong></div>
-          <div class="mini"><span>Audience</span><strong>Creative and aesthetic users</strong></div>
-          <div class="mini"><span>Hook</span><strong>Beautiful enough to share</strong></div>
-        </div>
-        <div class="columns">
-          <div class="box">
-            <h4>MVP Features</h4>
-            <ul>
-              <li>Scenes like coding bunker, rain library, night flight, quiet train</li>
-              <li>Matching timer and subtle motion</li>
-              <li>Quick-switch scene dock</li>
-              <li>Local saved favorites</li>
-            </ul>
-          </div>
-          <div class="box">
-            <h4>Why It Can Win</h4>
-            <ul>
-              <li>Stronger emotional brand than utility-only tools</li>
-              <li>Great for viral screenshots and clips</li>
-              <li>Feels more premium without a signup wall</li>
-              <li>Natural paid expansion path through scene packs</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </article>
-
-    <article class="card">
-      <div class="card-top">
-        <p class="kicker">6. Quick Utility</p>
-        <h3>Instant Reset</h3>
-        <p class="tagline">A short-session utility for people who need to snap into focus without committing to a full workspace.</p>
-      </div>
-      <div class="card-body">
-        <div class="mini-grid">
-          <div class="mini"><span>Main promise</span><strong>Reset in minutes</strong></div>
-          <div class="mini"><span>Audience</span><strong>Busy general users</strong></div>
-          <div class="mini"><span>Hook</span><strong>3, 10, 25, or 60 minute reset</strong></div>
-        </div>
-        <div class="columns">
-          <div class="box">
-            <h4>MVP Features</h4>
-            <ul>
-              <li>Three minute reset, ten minute reboot, twenty-five minute focus, sixty minute deep work</li>
-              <li>One-click start for each mode</li>
-              <li>Automatic fade out</li>
-              <li>Calm visual state that never asks for setup</li>
-            </ul>
-          </div>
-          <div class="box">
-            <h4>Why It Can Win</h4>
-            <ul>
-              <li>Easier to explain than a full productivity stack</li>
-              <li>Good habit loop for repeat daily sessions</li>
-              <li>Useful for workers, students, and general consumers</li>
-              <li>Feels like a simple web utility people can bookmark</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </article>
-  </section>
-
-  <div class="section-head" id="recommended">
-    <div>
-      <p class="eyebrow">Recommendation</p>
-      <h2>What Deafen Should Actually Build</h2>
-    </div>
-    <p>The strongest wedge is the one that is most believable, most differentiated, and most likely to get repeat daily use without needing installation or setup.</p>
-  </div>
-
-  <section class="panel">
-    <div class="columns">
-      <div class="box" style="background:var(--accent-soft)">
-        <h4>Best Primary Direction</h4>
-        <p class="note"><strong>Speech Blur / Focus Shield</strong> is the strongest lead concept. It gives Deafen a sharp promise, avoids fake ANC claims, and tackles one of the most annoying distractions people actually want solved: nearby speech.</p>
-      </div>
-      <div class="box" style="background:rgba(241,229,207,0.62)">
-        <h4>Best Backup Direction</h4>
-        <p class="note"><strong>Deafen for Students</strong> is the best growth-friendly secondary direction because it has huge audience size, obvious repeat use, and better odds of organic sharing through study content.</p>
-      </div>
-    </div>
-    <div class="columns" style="margin-top:16px">
-      <div class="box">
-        <h4>Simple Ranking</h4>
-        <ul>
-          <li>Speech Blur / Focus Shield</li>
-          <li>Deafen for Open Offices</li>
-          <li>Deafen for Students</li>
-          <li>Deep Work Scenes</li>
-          <li>Instant Reset</li>
-          <li>Deafen for Work as the broad fallback</li>
-        </ul>
-      </div>
-      <div class="box">
-        <h4>Metric Reality</h4>
-        <ul>
-          <li>Fifty thousand users and strong usage can help tell a story, but valuation comes from retention and growth quality.</li>
-          <li>A crowded category means differentiation matters more than raw ambient sound volume.</li>
-          <li>The winning version of Deafen must solve a felt problem instantly and keep doing so every day.</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <div class="footer">
-    This page replaces the broken browser ANC experiment with six product directions that can actually live on a website, require no signup, and support a more believable path to growth.
-  </div>
-</div>
+  </footer>
 </body>
 </html>
